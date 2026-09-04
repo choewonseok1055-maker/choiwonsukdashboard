@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>강서점 층별 조닝 리포트</title>
+<meta name="description" content="강서점 1~10층 브랜드별 8월 매출·성장을 매장 배치에 매칭한 경영 보고용 층별 조닝 진단.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#f4f5f7; --card:#fff; --card-2:#f7f8fa; --line:#e4e7ec; --line-2:#d3d8e0;
+    --ink:#141821; --ink-2:#4d5665; --ink-3:#8b94a2;
+    --brand:#1f5fd6; --brand-ink:#164aa8; --brand-soft:#e7eefb;
+    --blue:#1668d6; --blue-soft:#e5eefb; --blue-ink:#12509f;
+    --amber:#c9860c; --amber-soft:#f8efd9; --amber-ink:#8f5f06;
+    --red:#e5342b; --red-soft:#fde5e3; --red-ink:#bd211a;
+    --grey:#98a1ac; --grey-soft:#eef0f3;
+    --shadow:0 1px 2px rgba(20,24,33,.05),0 18px 42px -22px rgba(20,24,33,.22);
+    --radius:15px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#111419;--card:#1b1f26;--card-2:#232830;--line:#2c333d;--line-2:#3c4450;
+    --ink:#e9ecf1;--ink-2:#a9b1bd;--ink-3:#7c8592;--brand:#5f97ef;--brand-ink:#a3c3f7;--brand-soft:#1d2c45;
+    --blue:#5a9ce8;--blue-soft:#17293f;--blue-ink:#9fc3f2;--amber:#d9a340;--amber-soft:#33291a;--amber-ink:#e6bd74;
+    --red:#f0524a;--red-soft:#3c1f1d;--red-ink:#f5938c;--grey:#5c646f;--grey-soft:#262b32;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 20px 46px -24px rgba(0,0,0,.6);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#111419;--card:#1b1f26;--card-2:#232830;--line:#2c333d;--line-2:#3c4450;
+    --ink:#e9ecf1;--ink-2:#a9b1bd;--ink-3:#7c8592;--brand:#5f97ef;--brand-ink:#a3c3f7;--brand-soft:#1d2c45;
+    --blue:#5a9ce8;--blue-soft:#17293f;--blue-ink:#9fc3f2;--amber:#d9a340;--amber-soft:#33291a;--amber-ink:#e6bd74;
+    --red:#f0524a;--red-soft:#3c1f1d;--red-ink:#f5938c;--grey:#5c646f;--grey-soft:#262b32;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 20px 46px -24px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .num{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1240px;margin:0 auto;padding:40px 20px 90px}
+  @media (max-width:640px){.wrap{padding:24px 12px 60px}}
+
+  .rpt-h{display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px 20px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+  .rpt-h .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brand-ink);font-weight:600}
+  .rpt-h h1{font-size:clamp(21px,3.4vw,28px);font-weight:700;letter-spacing:-.02em;line-height:1.12;width:100%}
+  .rpt-h .sub{font-size:12.5px;color:var(--ink-2)}
+  .rpt-h .asof{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3);text-align:right;line-height:1.6}
+
+  .ftabs{display:flex;gap:4px;flex-wrap:wrap;margin:16px 0 0}
+  .ftabs button{appearance:none;border:1px solid var(--line-2);background:var(--card);font:inherit;font-size:12px;font-weight:600;color:var(--ink-3);padding:6px 14px;border-radius:999px;cursor:pointer;transition:all .12s}
+  .ftabs button:hover{color:var(--ink);border-color:var(--ink-3)}
+  .ftabs button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .ftabs button .k{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:500;display:block;opacity:.7;letter-spacing:.02em}
+
+  .fhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:18px 0 2px}
+  .fhead h2{font-size:18px;font-weight:700;letter-spacing:-.01em}
+  .fhead .ft{font-size:12.5px;color:var(--ink-2)}
+  .fhead .badge{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--brand-soft);color:var(--brand-ink)}
+  .fhead .badge.plan{background:var(--grey-soft);color:var(--ink-3)}
+
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+  @media (max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow)}
+  .kpi .k{font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-family:"IBM Plex Mono",monospace}
+  .kpi .v{font-size:18px;font-weight:700;margin-top:4px;letter-spacing:-.01em}
+  .kpi .v small{font-size:11.5px;font-weight:500;color:var(--ink-2)}
+  .kpi .v.red,.kpi .v .red{color:var(--red-ink)} .kpi .v.blue,.kpi .v .blue{color:var(--blue-ink)}
+
+  .mapcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:16px;overflow:hidden}
+  .mapcard-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px 12px;padding:14px 16px 0}
+  .mapcard-h h3{font-size:14px;font-weight:600}
+  .mapcard-h .hint{font-size:11px;color:var(--ink-3)}
+  .mapscroll{overflow-x:auto;padding:10px 12px 4px}
+  svg.plan{width:100%;height:auto;min-width:820px;display:block}
+  .z-name{font-family:"IBM Plex Sans KR",sans-serif;fill:var(--ink);font-weight:600}
+  .z-aug{font-family:"IBM Plex Mono",monospace;font-weight:700;fill:var(--ink)}
+  .z-sub{font-family:"IBM Plex Mono",monospace;fill:var(--ink-3)}
+  .z-badge{font-family:"IBM Plex Mono",monospace;font-weight:700}
+  .zone-tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;fill:var(--ink-3);text-transform:uppercase;font-weight:600}
+
+  .legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:4px 16px 14px;font-size:11px;color:var(--ink-2)}
+  .legend b{display:inline-flex;align-items:center;gap:6px;font-weight:500}
+  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none}
+  .sw-b{background:var(--blue)} .sw-a{background:var(--amber)} .sw-r{background:var(--red)} .sw-g{background:var(--grey)}
+
+  .tblcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:16px;overflow:hidden}
+  .tblcard h3{font-size:14px;font-weight:600;padding:14px 16px 10px}
+  .tblscroll{overflow-x:auto}
+  table.detail{width:100%;border-collapse:collapse;font-size:11px;min-width:900px}
+  table.detail th,table.detail td{padding:6px 9px;text-align:right;white-space:nowrap}
+  table.detail th:first-child,table.detail td:first-child,table.detail th:nth-child(2),table.detail td:nth-child(2){text-align:left}
+  table.detail thead th{font-size:9px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-3);font-weight:600;background:var(--card-2);border-bottom:1px solid var(--line-2)}
+  table.detail thead th.hi{color:var(--brand-ink)}
+  table.detail tbody tr{border-bottom:1px solid var(--line)}
+  table.detail tbody tr:hover{background:var(--card-2)}
+  table.detail .bn{font-weight:600}
+  table.detail td.aug{background:var(--brand-soft);font-weight:700}
+  table.detail .dot{width:7px;height:7px;border-radius:50%;display:inline-block;vertical-align:middle}
+  .d-b{background:var(--blue)}.d-a{background:var(--amber)}.d-r{background:var(--red)}.d-g{background:var(--grey)}
+  .g-pos{color:var(--blue-ink);font-weight:600}.g-neg{color:var(--red-ink);font-weight:700}.g-flat{color:var(--ink-3)}.g-new{color:var(--amber-ink);font-weight:600}
+  .sm{font-size:9px;font-weight:500}
+  table.detail tfoot td{padding:8px 9px;font-weight:700;border-top:2px solid var(--line-2);background:var(--card-2);text-align:right}
+  table.detail tfoot td:first-child{text-align:left}
+  .grp td{background:var(--card-2);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:5px 9px}
+
+  .diag{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media (max-width:800px){.diag{grid-template-columns:1fr}}
+  .dcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px}
+  .dcard h4{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .dcard h4 .tag{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:5px}
+  .dcard.now h4 .tag{background:var(--brand-soft);color:var(--brand-ink)}
+  .dcard.fix h4 .tag{background:var(--blue-soft);color:var(--blue-ink)}
+  .dcard ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .dcard li{font-size:12px;line-height:1.55;padding-left:14px;position:relative}
+  .dcard li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--ink-3)}
+  .dcard li b{font-weight:600}.dcard li .rk{color:var(--red-ink);font-weight:700}.dcard li .bk{color:var(--blue-ink);font-weight:600}
+
+  .planlist{padding:6px 16px 16px;font-size:11.5px;color:var(--ink-2);line-height:1.7}
+  .planlist .kd{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;margin-right:5px}
+  .kd.anchor{background:var(--brand-soft);color:var(--brand-ink)} .kd.lease{background:var(--amber-soft);color:var(--amber-ink)}
+  .kd.fnb{background:var(--blue-soft);color:var(--blue-ink)} .kd.ops{background:var(--grey-soft);color:var(--ink-3)} .kd.vacant{background:var(--red-soft);color:var(--red-ink)}
+
+  .foot{margin-top:20px;font-size:10px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line-2);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="rpt-h">
+    <div style="flex:1 1 auto">
+      <div class="eyebrow"><a href="./#gs" style="color:inherit;text-decoration:none">&larr; 강서점 현황판</a> · 층별 조닝 진단</div>
+      <h1 id="h-title">강서점 층별 조닝 리포트</h1>
+      <div class="sub" id="h-sub">브랜드별 <b>8월 월매출·성장</b>을 매장 배치에 매칭 · 색 = 8월 성장 신호 (누계는 보조)</div>
+    </div>
+    <div class="asof">도면 26.06&ndash;08<br>실적 data2608.xlsx<br>8월 단월 &amp; 26년 1&ndash;8월</div>
+  </header>
+
+  <nav class="ftabs" id="ftabs"></nav>
+  <div id="stage"></div>
+
+  <p class="foot">
+    본 리포트는 강서점 매장 배치도의 브랜드 구획에 사내 실적 데이터(data2608.xlsx)를 매칭한 자료입니다. 배치도 판독상 일부 소형 매장 명칭·면적에 오차가 있을 수 있으며, 확정 목록은 점포 조닝표와 대조 후 반영합니다. 7~10층(리빙·다이소·다이닝·옥상)은 앵커·직영·F&amp;B 매장으로 현황판 매출 집계 대상이 아니어서 도면(평수·구분)만 표시합니다. &lsquo;신규&rsquo; = 전년 동기 실적 없음(2026년 신규·리뉴얼).
+  </p>
+</div>
+
+<script>
+/* ============ 지표 정의 ============
+ sig: 8월 성장(m8g) 기준 — b:양호(+3%↑ 또는 앵커) / a:주의(-12~+3%·신규·누계역신장) / r:부진(-12%↓ 또는 저효율) / g:회색(직영·임대·F&B·미집계)
+ 값 단위: 억(매출·순증·수수료액) / 만원(일평당) / 평(전용면적)
+*/
+const F = { // 8월 실적 매칭 브랜드 (1~6층)
+1:{name:'1층',theme:'스포츠 / 잡화',kpi:[{k:'판매 브랜드',v:'19<small> 개</small>'},{k:'8월 매출',v:'12.2<small> 억</small>'},{k:'8월 1위',v:'<span class=blue>아디다스</span> <small>2.54억</small>'},{k:'8월 부진 <span style="color:var(--red)">●</span>',v:'<span class=red>6</span><small> 개</small>'},{k:'26년 ~8월 누계',v:'92.4<small> 억</small>'}],
+ zones:[
+  {t:'제화',keys:['미소페','엘칸토','소다','미셸BY탠디']},
+  {t:'남성 종합',keys:['헤지스종합관']},
+  {t:'스포츠',keys:['나이키','아디다스','SOW']},
+  {t:'캐주얼',keys:['세터']},
+  {t:'잡화',keys:['로제도르','DJI','닥스핸드백','로이드','미니골드','스톤헨지','메트로시티','헌터','질스카프','벨오프']},
+ ],
+ map:{vb:[1400,1010], shellPath:'M40 54 H1372 V970 H320 L40 780 Z', boh:[220,58,794,28], void:[428,408,208,214],
+  labels:[['F&B',60,120,-90],['SPORTS & 잡화',228,50,0],['임대',1034,50,0]],
+  tiles:[
+   ['아디다스',220,96,196,150],['나이키',428,96,416,150],
+   ['프랑제리',50,120,158,176],['스타벅스',50,308,158,168],
+   ['DJI',220,262,196,86],['헌터',220,356,196,86],['닥스핸드백',220,450,196,86],['로제도르',220,544,196,86],['스톤헨지',220,638,196,86],['미니골드',220,732,196,86],['로이드',220,826,196,86],
+   ['SOW',428,262,208,96],['세터',428,632,208,96],
+   ['메트로시티',648,262,200,90],['소다',648,360,200,96],['미셸BY탠디',648,464,200,96],['미소페',648,568,200,90],['엘칸토',648,666,200,96],
+   ['HM1',1026,96,336,560],
+   ['헤지스종합관',428,780,320,120],['질스카프',760,780,254,120],['벨오프',862,586,156,120]
+  ]},
+ b:{
+  '나이키':{d:'나이키',a:133.7,s25:10.9,s26:19.7,g26:null,mv:2.47,m8:2.16,m8g:null,net:null,f:7.0,fee:1.4,ppd:6.1,sig:'b',nt:'26년 1층 매출 1위·신규 대형'},
+  '아디다스':{d:'아디다스',a:70.4,s25:3.8,g25:-27.8,s26:11.0,g26:408.3,mv:1.37,m8:2.54,m8g:599.9,net:8.8,f:11.9,fee:1.3,ppd:6.4,sig:'b',nt:'리뉴얼 완전 안착·8월 매출 1위'},
+  '미소페':{d:'미소페',a:7.8,s25:7.4,g25:-6.5,s26:5.5,g26:21.0,mv:0.69,m8:0.60,m8g:23.4,net:1.0,f:21.8,fee:1.2,ppd:29.1,sig:'b'},
+  '로제도르':{d:'로제도르',a:4.3,s25:6.5,g25:-2.6,s26:5.4,g26:35.6,mv:0.67,m8:0.56,m8g:34.5,net:1.4,f:16.8,fee:0.9,ppd:49.7,sig:'b'},
+  '엘칸토':{d:'엘칸토',a:7.6,s25:7.5,g25:5.3,s26:5.2,g26:8.3,mv:0.65,m8:0.35,m8g:-14.3,net:0.4,f:18.0,fee:0.9,ppd:28.2,sig:'r',nt:'누계 +8%지만 8월 꺾임'},
+  'DJI':{d:'DJI',a:15.0,s26:5.2,g26:null,mv:1.30,m8:1.20,m8g:null,net:null,f:11.9,fee:0.6,ppd:31.0,sig:'a',nt:'신규 안착'},
+  '닥스핸드백':{d:'닥스 (핸드백)',a:8.2,s25:6.9,g25:-14.3,s26:5.3,g26:23.7,mv:0.66,m8:0.63,m8g:25.4,net:1.0,f:10.0,fee:0.5,ppd:26.3,sig:'b'},
+  '소다':{d:'소다',a:11.6,s25:6.4,g25:-28.5,s26:4.2,g26:1.8,mv:0.53,m8:0.30,m8g:-39.8,net:0.1,f:18.8,fee:0.8,ppd:14.9,sig:'r',nt:'누계 보합이나 8월 급락'},
+  '로이드':{d:'로이드 (LLOYD)',a:6.4,s25:6.9,g25:-15.4,s26:3.9,g26:-17.2,mv:0.49,m8:0.43,m8g:-20.0,net:-0.8,f:19.0,fee:0.7,ppd:25.2,sig:'r',nt:'8월·누계·순증 모두 마이너스'},
+  '미니골드':{d:'미니골드',a:4.0,s25:5.0,g25:2.7,s26:3.4,g26:5.9,mv:0.43,m8:0.41,m8g:-3.1,net:0.2,f:22.0,fee:0.8,ppd:35.5,sig:'a'},
+  '스톤헨지':{d:'스톤헨지',a:6.3,s25:4.1,g25:-6.5,s26:3.0,g26:9.9,mv:0.38,m8:0.38,m8g:4.2,net:0.3,f:15.6,fee:0.5,ppd:19.7,sig:'b'},
+  '메트로시티':{d:'메트로시티',a:6.5,s25:1.1,s26:2.7,g26:null,mv:0.34,m8:0.35,m8g:null,net:null,f:12.0,fee:0.3,ppd:19.6,sig:'a',nt:'신규 (25년 1.1억)'},
+  '헌터':{d:'헌터',a:14.0,s26:1.4,g26:null,mv:0.27,m8:0.23,m8g:null,net:null,f:14.2,fee:0.2,ppd:7.8,sig:'r',nt:'신규·일평당 7.8만 저효율'},
+  '벨오프':{d:'벨오프',a:4.1,s25:0.0,s26:0.0,g26:45.7,mv:0.04,m8:0.04,m8g:79.3,net:0.0,f:20.0,fee:0.0,ppd:1.7,sig:'a',nt:'팝업'},
+  'SOW':{d:'SOW',a:25.7,s26:1.0,g26:null,mv:0.51,m8:0.35,m8g:null,net:null,f:10.0,fee:0.1,ppd:9.4,sig:'r',nt:'중앙 대면적 25.7평·일평당 9.4만'},
+  '세터':{d:'세터',a:26.4,s26:1.2,g26:null,mv:0.41,m8:0.24,m8g:null,net:null,f:13.9,fee:0.2,ppd:4.5,sig:'r',nt:'중앙 대면적 26.4평·일평당 4.5만 최하위'},
+  '헤지스종합관':{d:'헤지스 종합관',a:52.4,s25:11.7,g25:-10.3,s26:8.3,g26:10.2,mv:1.04,m8:0.75,m8g:0.0,net:0.8,f:12.0,fee:1.0,ppd:6.5,sig:'a',nt:'회복세이나 8월 정체'},
+  '미셸BY탠디':{d:'미셸 by 탠디',a:14.0,s25:9.8,g25:-22.2,s26:5.4,g26:-15.0,mv:0.67,m8:0.65,m8g:13.0,net:-0.9,f:19.9,fee:1.1,ppd:15.8,sig:'a',nt:'8월 반등, 누계 -15%·순증 -0.9억'},
+  '질스카프':{d:'질스튜어트 (스카프)',a:1.5,s25:1.2,g25:-13.2,s26:0.5,g26:105.9,mv:0.16,m8:null,m8g:null,net:0.2,f:30.0,fee:0.1,ppd:42.1,sig:'b'},
+  '프랑제리':{d:'프랑제리',a:57.4,kind:'fnb',nt:'베이커리·집객 자산'},
+  '스타벅스':{d:'스타벅스',a:50.2,kind:'fnb',nt:'카페·집객 자산'},
+  'HM1':{d:'H&M',a:251.4,kind:'lease',big:3,nt:'외부 임대 (+2층 290.9평)'},
+ },
+ diag:{now:[
+  '<b>스포츠 2강 구도 확립</b> — 8월 <span class=bk>아디다스 2.54억(+600%)</span>이 나이키(2.16억)를 근소 추월. 리뉴얼 완전 안착.',
+  '<span class=rk>소다 8월 -39.8%</span> — 누계 +1.8%였으나 8월 급락, 25년 -28.5% 이력과 겹쳐 즉시 점검 필요.',
+  '<span class=rk>세터·SOW</span> 중앙 대면적(26.4·25.7평) 일평당 4.5·9.4만으로 1층 최하위. <span class=rk>로이드</span>는 8월·누계·순증 전부 마이너스.',
+  '<b>미셸 by 탠디</b> 8월 +13% 반등했으나 누계 -15%·순증 -0.9억 — 반등 지속성 1~2개월 확인.',
+ ],fix:[
+  '<b>소다·엘칸토 8월 급락 원인 진단 우선</b> — 재고·프로모션·인접 경쟁 영향. 9월 반등 없으면 조닝 축소.',
+  '<b>세터·SOW 중앙 52평 재배치</b> — 고평당 잡화(로제도르 49.7만·미니골드 35.5만)나 성장 스포츠로 전환.',
+  '<span class=rk>로이드</span> VMD·상품 리뉴얼 최종 기한 부여, 미개선 시 교체.',
+  '신규 4개(DJI·헌터·세터·SOW) 3개월 재평가 — DJI 안착, 나머지 조기 손절 검토.',
+ ]}
+},
+
+2:{name:'2층',theme:'영캐주얼',
+ zones:[
+  {t:'영캐주얼',keys:['베네통','시슬리','클라비스','틸버리','르샵','스튜디오화이트','엔코코','리스트','로엠','숲','플라스틱아일랜드','쥬시쥬디','비지트인뉴욕','듀엘','샤틴','렙쇼메이','유닛','리안뉴욕','씨SI','에잇컨셉','밸리걸','헤이린뉴욕','르니앤맥코이']},
+ ],
+ map:{vb:[1720,1276], shellPath:'M150 74 H1694 V1248 H820 Q150 1248 150 820 Z', boh:[392,80,1000,148], void:[756,456,244,300],
+  labels:[['여성 캐주얼',156,236,0],['영캐 편집',560,236,0],['임대',1444,236,0]],
+  tiles:[
+   ['듀엘',156,250,192,124],['시슬리',156,382,192,124],['베네통',156,514,192,124],['샤틴',156,646,192,124],
+   ['렙쇼메이',356,250,192,124],['에잇컨셉',356,382,192,124],['틸버리',356,514,192,124],['비지트인뉴욕',356,646,192,124],['쥬시쥬디',356,778,192,124],['abfz',356,910,192,124],
+   ['플라스틱아일랜드',556,250,192,124],['유닛',556,382,192,124],['리안뉴욕',556,514,192,124],['씨SI',556,646,192,124],['르니앤맥코이',556,778,192,124],
+   ['애니바디',756,250,244,95],['트랜드컬렉션',756,352,244,95],
+   ['행사장L',770,778,110,130],['행사장R',886,778,110,130],
+   ['스튜디오화이트',1008,250,192,124],['클라비스',1008,382,192,124],['르샵',1008,514,192,124],['엔코코',1008,646,192,124],['리스트',1008,778,192,124],
+   ['밸리걸',1208,250,192,124],['헤이린뉴욕',1208,382,192,124],['신디플래그샵',1208,514,192,124],['데이텀',1208,646,192,124],['이즈멜본',1208,778,192,124],
+   ['로엠',156,1050,392,160],['숲',556,1050,192,160],['SI종합관',1008,1050,392,160],
+   ['HM2',1408,250,286,960]
+  ]},
+ b:{
+  '시슬리':{d:'시슬리',a:22.7,s25:9.5,g25:21.1,s26:6.5,g26:25.3,mv:0.81,m8:0.71,m8g:65.7,net:1.3,f:16.0,fee:1.0,ppd:11.8,sig:'b',nt:'8월 +65.7% 강세'},
+  '베네통':{d:'베네통 (영캐)',a:22.7,s25:14.0,g25:-9.6,s26:9.9,g26:9.6,mv:1.24,m8:1.03,m8g:2.2,net:0.9,f:15.0,fee:1.5,ppd:18.0,sig:'a'},
+  '클라비스':{d:'클라비스',a:19.7,s25:5.7,g25:-22.8,s26:4.9,g26:21.9,mv:0.61,m8:0.50,m8g:13.5,net:0.9,f:25.0,fee:1.2,ppd:10.1,sig:'b'},
+  '틸버리':{d:'틸버리',a:11.1,s25:5.9,g25:-14.4,s26:4.1,g26:20.4,mv:0.51,m8:0.25,m8g:-24.4,net:0.7,f:23.0,fee:0.9,ppd:15.2,sig:'r',nt:'누계 +20%지만 8월 -24%'},
+  '르샵':{d:'르샵',a:20.0,s25:5.9,g25:-26.0,s26:4.0,g26:4.1,mv:0.50,m8:0.37,m8g:-26.9,net:0.2,f:20.0,fee:0.8,ppd:8.3,sig:'r'},
+  '스튜디오화이트':{d:'스튜디오화이트',a:19.9,s25:5.8,g25:-1.7,s26:3.9,g26:7.3,mv:0.48,m8:0.38,m8g:11.4,net:0.3,f:21.0,fee:0.8,ppd:8.0,sig:'b'},
+  '엔코코':{d:'엔코코',a:12.8,s25:5.2,g25:-7.7,s26:2.9,g26:-21.1,mv:0.36,m8:0.18,m8g:-54.1,net:-0.8,f:26.0,fee:0.7,ppd:9.2,sig:'r',nt:'8월 -54%·순증 -0.8억'},
+  '리스트':{d:'리스트',a:12.6,s25:4.6,g25:11.1,s26:2.7,g26:-5.2,mv:0.34,m8:0.32,m8g:2.5,net:-0.1,f:26.0,fee:0.7,ppd:8.9,sig:'a'},
+  '리안뉴욕':{d:'리안뉴욕',a:11.2,s26:2.3,g26:null,mv:0.29,m8:0.18,m8g:null,net:null,f:25.0,fee:0.6,ppd:7.0,sig:'a',nt:'신규'},
+  '플라스틱아일랜드':{d:'플라스틱아일랜드',a:13.4,s25:4.2,g25:-43.1,s26:2.0,g26:-33.9,mv:0.25,m8:0.21,m8g:72.9,net:-1.0,f:16.0,fee:0.3,ppd:6.2,sig:'a',nt:'8월 반등, 누계 -34%'},
+  '쥬시쥬디':{d:'쥬시쥬디',a:11.4,s25:3.3,g25:-3.2,s26:2.0,g26:-9.0,mv:0.25,m8:0.13,m8g:-52.8,net:-0.2,f:22.0,fee:0.4,ppd:7.2,sig:'r'},
+  '비지트인뉴욕':{d:'비지트인뉴욕',a:14.1,s25:3.6,g25:13.6,s26:1.9,g26:-21.8,mv:0.23,m8:0.18,m8g:-7.2,net:-0.5,f:24.0,fee:0.4,ppd:5.4,sig:'r'},
+  '듀엘':{d:'듀엘',a:28.4,s25:2.5,g25:-30.4,s26:1.4,g26:-10.5,mv:0.17,m8:0.10,m8g:-49.1,net:-0.2,f:15.0,fee:0.2,ppd:2.0,sig:'r',nt:'28평 대면적·일평당 2.0만 최저'},
+  '샤틴':{d:'샤틴',a:15.0,s25:1.5,g25:-15.6,s26:1.2,g26:46.6,mv:0.15,m8:0.11,m8g:127.4,net:0.4,f:22.0,fee:0.3,ppd:3.3,sig:'b'},
+  '렙쇼메이':{d:'렙쇼메이 (팝)',a:24.8,s25:1.0,s26:1.0,g26:259.5,mv:0.13,m8:0.10,m8g:-37.5,net:0.8,f:22.0,fee:0.2,ppd:1.7,sig:'r',nt:'대면적 저효율'},
+  '유닛':{d:'유닛',a:13.4,s25:2.2,s26:0.6,g26:-50.6,mv:0.07,m8:0.05,m8g:-54.5,net:-0.6,f:24.0,fee:0.1,ppd:1.2,sig:'r'},
+  '에잇컨셉':{d:'에잇컨셉',a:23.3,s26:0.6,g26:null,mv:0.19,m8:0.19,m8g:null,net:null,f:23.0,fee:0.1,ppd:3.3,sig:'a',nt:'신규'},
+  '밸리걸':{d:'밸리걸',a:14.4,s26:0.5,g26:null,mv:0.17,m8:0.17,m8g:null,net:null,f:24.0,fee:0.1,ppd:4.6,sig:'a',nt:'신규'},
+  '헤이린뉴욕':{d:'헤이린뉴욕',a:26.8,s26:0.4,g26:null,mv:0.20,m8:0.23,m8g:null,net:null,f:24.0,fee:0.1,ppd:2.7,sig:'a',nt:'신규·대면적'},
+  '르니앤맥코이':{d:'르니앤맥코이',a:11.7,s26:0.4,g26:null,mv:0.13,m8:0.12,m8g:null,net:null,f:23.0,fee:0.1,ppd:4.1,sig:'a',nt:'신규'},
+  '씨SI':{d:'씨 (SI)',a:11.6,s26:1.0,g26:null,mv:0.25,m8:0.31,m8g:null,net:null,f:24.0,fee:0.2,ppd:9.0,sig:'a',nt:'신규'},
+  '로엠':{d:'로엠 메가샵',a:46.6,s25:8.6,g25:10.2,s26:5.6,g26:-5.3,mv:0.69,m8:0.52,m8g:-22.2,net:-0.3,f:24.0,fee:1.3,ppd:4.9,sig:'r',nt:'46평 대면적·8월 -22%'},
+  '숲':{d:'숲 (SOUP)',a:21.8,s25:3.4,g25:5.0,s26:1.9,g26:-3.7,mv:0.24,m8:0.28,m8g:31.5,net:-0.1,f:24.0,fee:0.5,ppd:3.6,sig:'a'},
+  'SI종합관':{d:'SI 종합관',a:60.4,kind:'ops',nt:'톰보이·보브·지컷·개별 미집계'},
+  'HM2':{d:'H&M',a:290.9,kind:'lease',nt:'외부 임대'},
+  'abfz':{d:'a.b.fz',a:11.4,kind:'ops',nt:'미집계'},
+  '애니바디':{d:'애니바디 플래그샵',a:30.7,kind:'ops',nt:'신규·미집계'},
+  '트랜드컬렉션':{d:'트랜드컬렉션',a:19.9,kind:'ops',nt:'신규·미집계'},
+  '신디플래그샵':{d:'신디 플래그샵',a:24.4,kind:'ops',nt:'신규·미집계'},
+  '데이텀':{d:'데이텀',a:14.4,kind:'ops',nt:'신규·미집계'},
+  '이즈멜본':{d:'이즈멜본',a:14.4,kind:'ops',nt:'신규·미집계'},
+  '행사장L':{d:'행사장',a:8.1,kind:'ops'},
+  '행사장R':{d:'행사장',a:9.1,kind:'ops'},
+ },
+ diag:{now:[
+  '<b>영캐 상위는 견조</b> — <span class=bk>시슬리 8월 +65.7%</span>, 클라비스 +13.5%, 스튜디오화이트 +11.4%.',
+  '<span class=rk>엔코코 -54%·쥬시쥬디 -53%·유닛 -55%</span> 8월 급락. 르샵·틸버리도 8월 -25% 내외.',
+  '<b>대면적 저효율 집중</b> — 로엠(46.6평)·듀엘(28.4평)·헤이린뉴욕(26.8평)·렙쇼메이(24.8평) 일평당 1.7~4.9만.',
+  'H&M 2층분 290.9평 + SI종합관 60.4평이 층 면적의 큰 비중 — 직접 MD 대상 아님.',
+ ],fix:[
+  '<b>로엠·듀엘 면적 대비 실적 재검토</b> — 축소 후 성장 브랜드(시슬리·클라비스)에 면적 재배분.',
+  '<span class=rk>엔코코·유닛·쥬시쥬디</span> 8월 급락 3개월 관찰 후 교체 판단.',
+  '신규 6개(리안뉴욕·에잇컨셉·밸리걸·헤이린뉴욕·르니앤맥코이·씨) 안착률 분기 평가 — 대면적 신규(헤이린뉴욕) 우선.',
+  '영캐 편집존 동선 정리 — 소형 매장 난립, 상위 5개 중심으로 재구성.',
+ ]}
+},
+
+3:{name:'3층',theme:'여성 / 화장품 / 명품',
+ zones:[
+  {t:'여성',keys:['더아이잗','JJ지고트','지고트','꼼빠니아','올리비아로렌','베스띠벨리','조이너스','데코','발렌시아','쉬즈미스','미니멈','제시뉴욕','크로커다일레이디','엠씨','잇미샤','요하넥스','모조에스핀','기비키이스','리본','더레노마','포라리','형지복합관','케네스레이디','보니스팍스','크레송','소고','안지크','막스마리오','미샤커리어']},
+  {t:'화장품',keys:['아모레','엔프라니']},
+  {t:'란제리',keys:['비너스','비비안','게스언더','트라이엄프']},
+  {t:'가방',keys:['키플링']},
+ ],
+ map:{vb:[1720,1096], shellPath:'M150 74 H1694 V1068 H820 Q150 1068 150 720 Z', boh:[392,80,1000,148], void:[756,456,244,300],
+  labels:[['커리어',156,236,0],['영캐릭터·화장품',1008,236,0]],
+  tiles:[
+   ['발렌시아',156,250,192,124],['케네스레이디',156,382,192,124],['JJ지고트',156,514,192,124],['비너스',156,646,192,124],['비비안',156,778,192,124],['게스언더',156,910,192,124],
+   ['올리비아로렌',356,250,192,124],['베스띠벨리',356,382,192,124],['요하넥스',356,514,192,124],['크로커다일레이디',356,646,192,124],['포라리',356,778,192,124],['리본',356,910,192,124],
+   ['꼼빠니아',556,250,192,124],['더아이잗',556,382,192,124],['잇미샤',556,514,192,124],['제시뉴욕',556,646,192,124],['크레송',556,778,192,124],['쉬즈미스',556,910,192,124],
+   ['엠씨',1008,250,192,124],['소고',1008,382,192,124],['트라이엄프',1008,514,192,124],['형지복합관',1008,646,192,124],['보니스팍스',1008,778,192,124],['더레노마',1008,910,192,124],
+   ['조이너스',1208,250,192,124],['아모레',1208,382,192,124],['엔프라니',1208,514,192,124],['키플링',1208,646,192,124],['미니멈',1208,778,192,124],['기비키이스',1208,910,192,124],
+   ['안지크',1408,250,286,124],['지고트',1408,382,286,124],['데코',1408,514,286,124],['미샤커리어',1408,646,286,124],['모조에스핀',1408,778,286,124],['막스마리오',1408,910,286,124]
+  ]},
+ b:{
+  '더아이잗':{d:'더 아이잗',a:12.8,s25:13.5,g25:43.7,s26:8.9,g26:10.6,mv:1.11,m8:0.70,m8g:-10.0,net:0.9,f:22.0,fee:2.0,ppd:28.5,sig:'a',nt:'누계 강세, 8월 -10%'},
+  'JJ지고트':{d:'JJ지고트',a:13.5,s25:12.8,g25:49.3,s26:7.8,g26:9.4,mv:0.97,m8:1.06,m8g:31.8,net:0.7,f:21.9,fee:1.7,ppd:23.7,sig:'b',nt:'8월 매출 1위'},
+  '지고트':{d:'지고트',a:18.6,s25:11.9,g25:13.3,s26:7.0,g26:-3.9,mv:0.88,m8:0.83,m8g:-12.8,net:-0.3,f:18.7,fee:1.3,ppd:15.5,sig:'r'},
+  '꼼빠니아':{d:'꼼빠니아',a:12.9,s25:6.9,g25:-39.4,s26:6.4,g26:46.9,mv:0.80,m8:0.62,m8g:58.7,net:2.0,f:25.0,fee:1.6,ppd:20.2,sig:'b',nt:'층 최고 성장 (+58.7%)'},
+  '올리비아로렌':{d:'올리비아로렌',a:15.3,s25:6.3,g25:-13.9,s26:4.7,g26:12.3,mv:0.59,m8:0.43,m8g:72.7,net:0.5,f:23.0,fee:1.1,ppd:12.7,sig:'b'},
+  '베스띠벨리':{d:'베스띠벨리',a:13.2,s25:5.4,g25:20.4,s26:4.5,g26:24.6,mv:0.57,m8:0.32,m8g:53.3,net:0.9,f:25.0,fee:1.1,ppd:14.1,sig:'b'},
+  '조이너스':{d:'조이너스',a:13.3,s25:5.4,g25:-29.7,s26:4.4,g26:22.3,mv:0.56,m8:0.30,m8g:14.7,net:0.8,f:24.0,fee:1.1,ppd:13.7,sig:'b'},
+  '데코':{d:'데코',a:18.6,s25:6.6,g25:-4.9,s26:3.9,g26:0.2,mv:0.49,m8:0.32,m8g:-18.9,net:0.0,f:20.9,fee:0.8,ppd:8.7,sig:'r'},
+  '발렌시아':{d:'발렌시아',a:15.1,s25:6.2,g25:-5.1,s26:3.7,g26:2.3,mv:0.46,m8:0.12,m8g:-27.7,net:0.1,f:20.8,fee:0.8,ppd:10.1,sig:'r'},
+  '쉬즈미스':{d:'쉬즈미스',a:12.8,s25:5.7,g25:20.0,s26:3.6,g26:9.4,mv:0.45,m8:0.36,m8g:-0.1,net:0.3,f:22.0,fee:0.8,ppd:11.6,sig:'a'},
+  '미니멈':{d:'미니멈',a:19.4,s25:5.4,g25:-2.7,s26:3.3,g26:-2.4,mv:0.42,m8:0.20,m8g:-35.7,net:-0.1,f:20.9,fee:0.7,ppd:7.1,sig:'r'},
+  '제시뉴욕':{d:'제시뉴욕',a:14.0,s25:5.1,g25:-15.8,s26:3.3,g26:-8.2,mv:0.42,m8:0.44,m8g:10.3,net:-0.3,f:24.0,fee:0.8,ppd:9.8,sig:'a'},
+  '크로커다일레이디':{d:'크로커다일레이디',a:13.5,s25:5.1,g25:-25.2,s26:3.2,g26:-8.2,mv:0.40,m8:0.22,m8g:-20.8,net:-0.3,f:23.0,fee:0.7,ppd:9.9,sig:'r'},
+  '엠씨':{d:'엠씨',a:14.1,s25:4.5,g25:16.7,s26:3.1,g26:11.5,mv:0.39,m8:0.17,m8g:-28.7,net:0.3,f:23.0,fee:0.7,ppd:9.1,sig:'r'},
+  '잇미샤':{d:'잇미샤',a:13.7,s25:5.1,g25:-9.5,s26:2.9,g26:-14.9,mv:0.36,m8:0.33,m8g:11.2,net:-0.5,f:21.0,fee:0.6,ppd:8.7,sig:'a'},
+  '요하넥스':{d:'요하넥스',a:13.5,s25:4.1,g25:13.3,s26:2.8,g26:4.5,mv:0.35,m8:0.30,m8g:-15.8,net:0.1,f:21.0,fee:0.6,ppd:8.6,sig:'r'},
+  '모조에스핀':{d:'모조에스핀',a:28.5,s25:3.8,g25:-22.6,s26:2.7,g26:29.4,mv:0.33,m8:0.18,m8g:-29.0,net:0.6,f:12.0,fee:0.3,ppd:3.8,sig:'r',nt:'28평 대면적·일평당 3.8만'},
+  '기비키이스':{d:'기비 / 키이스',a:18.1,s25:4.3,g25:-9.6,s26:2.6,g26:-6.7,mv:0.32,m8:0.23,m8g:-3.6,net:-0.2,f:19.5,fee:0.5,ppd:5.9,sig:'r'},
+  '키플링':{d:'키플링',a:9.1,s25:3.9,g25:-15.7,s26:2.5,g26:-1.8,mv:0.32,m8:0.30,m8g:14.6,net:-0.1,f:15.9,fee:0.4,ppd:11.5,sig:'b'},
+  '리본':{d:'리본',a:13.0,s25:3.3,g25:2.1,s26:2.5,g26:21.3,mv:0.31,m8:0.16,m8g:-2.2,net:0.4,f:23.0,fee:0.6,ppd:7.9,sig:'a'},
+  '엔프라니':{d:'엔프라니',a:9.7,s25:3.2,g25:-11.7,s26:2.5,g26:34.5,mv:0.31,m8:0.38,m8g:115.4,net:0.6,f:24.8,fee:0.6,ppd:10.5,sig:'b',nt:'8월 +115%'},
+  '더레노마':{d:'더 레노마',a:13.9,s25:4.2,g25:-15.5,s26:2.3,g26:-12.0,mv:0.29,m8:0.15,m8g:-37.8,net:-0.3,f:23.9,fee:0.6,ppd:6.9,sig:'r'},
+  '포라리':{d:'포라리',a:13.5,s25:3.6,g25:-22.3,s26:2.3,g26:-10.2,mv:0.28,m8:0.10,m8g:-65.7,net:-0.3,f:28.0,fee:0.6,ppd:6.9,sig:'r'},
+  '비너스':{d:'비너스',a:12.7,s25:3.0,g25:-19.0,s26:2.2,g26:2.3,mv:0.28,m8:0.24,m8g:1.2,net:0.0,f:20.6,fee:0.5,ppd:7.3,sig:'a'},
+  '비비안':{d:'비비안',a:10.3,s25:2.9,g25:-9.1,s26:2.1,g26:1.5,mv:0.26,m8:0.29,m8g:17.3,net:0.0,f:20.8,fee:0.4,ppd:8.3,sig:'b'},
+  '형지복합관':{d:'형지 복합관',a:21.1,s25:2.1,g25:185.1,s26:2.0,g26:36.0,mv:0.26,m8:0.21,m8g:60.5,net:0.5,f:24.0,fee:0.5,ppd:4.0,sig:'b'},
+  '케네스레이디':{d:'케네스레이디',a:14.0,s25:1.5,g25:3.0,s26:1.8,g26:100.1,mv:0.23,m8:0.16,m8g:61.7,net:0.9,f:22.0,fee:0.4,ppd:5.4,sig:'b'},
+  '보니스팍스':{d:'보니스팍스',a:14.0,s25:2.7,g25:41.7,s26:1.8,g26:10.1,mv:0.22,m8:0.17,m8g:13.1,net:0.2,f:20.0,fee:0.4,ppd:5.2,sig:'b'},
+  '트라이엄프':{d:'트라이엄프',a:5.4,s25:2.3,g25:-7.2,s26:1.7,g26:0.1,mv:0.21,m8:0.29,m8g:-10.0,net:0.0,f:25.0,fee:0.4,ppd:13.1,sig:'a'},
+  '크레송':{d:'크레송',a:12.8,s25:2.6,g25:-18.8,s26:1.7,g26:15.4,mv:0.21,m8:0.11,m8g:106.4,net:0.2,f:23.0,fee:0.4,ppd:5.4,sig:'b'},
+  '소고':{d:'SOGO (소고)',a:13.5,s25:1.1,s26:1.6,g26:249.9,mv:0.20,m8:0.12,m8g:-5.8,net:1.2,f:25.0,fee:0.4,ppd:4.9,sig:'a',nt:'신규'},
+  '게스언더':{d:'게스언더웨어',a:8.0,s25:1.6,g25:-30.2,s26:1.3,g26:7.6,mv:0.16,m8:0.12,m8g:7.6,net:0.1,f:25.0,fee:0.3,ppd:6.6,sig:'b'},
+  '안지크':{d:'안지크',a:18.1,s25:1.9,g25:-45.9,s26:1.2,g26:-7.4,mv:0.15,m8:0.06,m8g:-44.9,net:-0.1,f:24.0,fee:0.3,ppd:2.8,sig:'r',nt:'18평 대면적·일평당 2.8만'},
+  '막스마리오':{d:'막스마리오',a:15.1,s26:0.6,g26:null,mv:0.13,m8:0.13,m8g:null,net:null,f:25.0,fee:0.2,ppd:2.9,sig:'a',nt:'신규·대면적'},
+  '미샤커리어':{d:'미샤 (커리어)',a:44.3,s25:7.3,g25:-18.9,s26:2.9,g26:-29.6,mv:0.37,m8:0.43,m8g:25.0,net:-1.2,f:12.0,fee:0.4,ppd:2.7,sig:'a',nt:'44평 대면적·일평당 2.7만·순증 -1.2억'},
+  '아모레':{d:'아모레퍼시픽',a:16.4,s25:6.2,g25:22.1,s26:4.9,g26:25.5,mv:0.62,m8:0.50,m8g:36.5,net:1.0,f:20.0,fee:1.0,ppd:12.3,sig:'b',nt:'화장품 존·8월 +36.5%'},
+ },
+ diag:{now:[
+  '<b>커리어 상위·영패턴 여성이 성장 견인</b> — <span class=bk>꼼빠니아 +58.7%·올리비아로렌·베스띠벨리·조이너스</span> 8월 두 자리 성장, JJ지고트 8월 매출 1위.',
+  '<span class=rk>지고트·데코·미니멈·발렌시아</span> 8월 -19~-36%. 대형 커리어(지고트 18.6평)의 부진이 층 실적 압박.',
+  '<b>대면적 저효율</b> — 미샤 커리어(44.3평·일평당 2.7만)·모조에스핀(28.5평)·안지크(18.1평). 미샤는 순증 -1.2억.',
+  '영캐릭터존은 소형 다수 — 엔프라니(+115%)·케네스레이디(+62%)·크레송(+106%) 등 반등 신호도 혼재.',
+ ],fix:[
+  '<b>미샤 커리어 44평 축소·재배치</b> — 성장 커리어(꼼빠니아·JJ지고트)에 면적 이전.',
+  '<span class=rk>지고트·데코·미니멈</span> 8월 부진 원인 진단, 4분기 반등 없으면 조닝 조정.',
+  '신규(소고·막스마리오) + 리뉴얼 3개월 재평가.',
+  '영캐릭터 소형 매장 정리 — 반등 브랜드(엔프라니·크레송·케네스레이디) 중심 재구성.',
+ ]}
+},
+
+4:{name:'4층',theme:'캐주얼 / 스포츠',
+ zones:[
+  {t:'스포츠',keys:['뉴발란스','슈마커','푸마','스노우피크','크록스','제인코트','아레나','ABC마트']},
+  {t:'캐주얼',keys:['마인드브릿지','프로젝트M','지오다노','폴햄','위라이크','바인드','후아유','캉골','MLB','행텐','더블에이트','NBA','JEEP','리바이스','라이프워크','그루브라임','슈펜','예일','스파오','게스메가샵','알레스카','NC베이직']},
+ ],
+ map:{vb:[1720,1244], shellPath:'M150 74 H1694 V1216 H820 Q150 1216 150 820 Z', boh:[392,80,1000,148], void:[756,456,244,300],
+  labels:[['스트리트·스포츠',156,236,0],['직영·off-price',1008,236,0]],
+  tiles:[
+   ['슈마커',156,250,192,124],['지오다노',156,382,192,124],['후아유',156,514,192,124],['바인드',156,646,192,124],['NC베이직',156,778,192,124],['라이프워크',156,910,192,124],
+   ['폴햄',356,250,192,124],['그루브라임',356,382,192,124],['JEEP',356,514,192,124],['예일',356,646,192,124],['행텐',356,778,192,124],['더블에이트',356,910,192,124],
+   ['마인드브릿지',556,250,192,124],['위라이크',556,382,192,124],['프로젝트M',556,514,192,124],['캉골',556,646,192,124],['NBA',556,778,192,124],['리바이스',556,910,192,124],
+   ['스노우피크',1008,250,192,124],['MLB',1008,382,192,124],['아레나',1008,514,192,124],['제인코트',1008,646,192,124],['크록스',1008,778,192,124],
+   ['게스메가샵',1208,250,192,124],['슈펜',1208,382,192,124],['알레스카',1208,514,192,124],
+   ['스파오',1408,250,286,180],['ABC마트',1408,442,286,300],
+   ['뉴발란스',156,1050,300,166],['푸마',464,1050,200,166]
+  ]},
+ b:{
+  'ABC마트':{d:'ABC-MART',a:122.0,s25:18.1,g25:-17.9,s26:12.8,g26:-3.2,mv:1.60,m8:1.25,m8g:-5.5,net:-0.4,f:13.0,fee:1.7,ppd:4.3,sig:'a',nt:'122평 대형·8월 -5.5%'},
+  '슈마커':{d:'슈마커',a:55.2,s25:12.2,g25:17.7,s26:7.2,g26:-14.7,mv:0.90,m8:0.61,m8g:-15.0,net:-1.2,f:14.0,fee:1.0,ppd:5.3,sig:'r',nt:'55평·순증 -1.2억'},
+  '마인드브릿지':{d:'마인드브릿지',a:13.2,s25:10.4,g25:-2.7,s26:6.4,g26:-2.1,mv:0.80,m8:0.52,m8g:-6.0,net:-0.1,f:22.2,fee:1.4,ppd:19.9,sig:'r'},
+  '스노우피크':{d:'스노우피크',a:29.9,s25:8.3,g25:31.1,s26:6.2,g26:70.5,mv:0.77,m8:0.50,m8g:81.0,net:2.6,f:17.0,fee:1.1,ppd:8.5,sig:'b',nt:'8월 +81%·순증 +2.6억'},
+  '프로젝트M':{d:'프로젝트M',a:13.1,s25:8.6,g25:7.0,s26:6.1,g26:7.6,mv:0.76,m8:0.66,m8g:13.2,net:0.4,f:24.9,fee:1.5,ppd:19.0,sig:'b'},
+  '지오다노':{d:'지오다노',a:30.0,s25:9.2,g25:-11.8,s26:5.3,g26:-4.3,mv:0.67,m8:0.40,m8g:-24.7,net:-0.2,f:20.0,fee:1.1,ppd:7.3,sig:'r',nt:'30평·8월 -24.7%'},
+  '폴햄':{d:'폴햄',a:20.9,s25:6.9,g25:-29.4,s26:5.0,g26:13.1,mv:0.63,m8:0.43,m8g:28.4,net:0.6,f:20.7,fee:1.0,ppd:9.9,sig:'b'},
+  '위라이크':{d:'위라이크',a:12.8,s26:4.7,g26:null,mv:0.59,m8:0.39,m8g:null,net:null,f:20.0,fee:1.0,ppd:17.2,sig:'a',nt:'신규'},
+  '바인드':{d:'바인드',a:57.6,s25:8.2,g25:6.4,s26:4.5,g26:-17.1,mv:0.57,m8:0.46,m8g:-25.5,net:-0.9,f:15.0,fee:0.7,ppd:3.2,sig:'r',nt:'57.6평 대면적·일평당 3.2만'},
+  '후아유':{d:'후아유',a:25.1,s25:7.9,g25:3.0,s26:4.5,g26:-7.9,mv:0.57,m8:0.39,m8g:12.9,net:-0.4,f:23.0,fee:1.0,ppd:7.4,sig:'a'},
+  '크록스':{d:'크록스',a:21.6,s25:5.0,g25:208.5,s26:4.5,g26:5.1,mv:0.56,m8:0.42,m8g:-38.0,net:0.2,f:19.9,fee:0.9,ppd:8.4,sig:'r',nt:'8월 -38%'},
+  '뉴발란스':{d:'뉴발란스 상설메가샵',a:95.0,s25:8.0,g25:-19.9,s26:4.0,g26:-16.6,mv:0.51,m8:0.47,m8g:17.3,net:-0.8,f:14.0,fee:0.6,ppd:1.8,sig:'a',nt:'95평 대면적·일평당 1.8만 최저'},
+  '캉골':{d:'캉골',a:13.5,s25:6.4,g25:-5.6,s26:4.0,g26:-13.9,mv:0.50,m8:0.59,m8g:4.4,net:-0.6,f:20.0,fee:0.8,ppd:12.2,sig:'a'},
+  'MLB':{d:'MLB',a:24.5,s25:6.6,g25:-10.1,s26:3.9,g26:-11.1,mv:0.49,m8:0.25,m8g:-2.7,net:-0.5,f:14.7,fee:0.6,ppd:6.5,sig:'r'},
+  '행텐':{d:'행텐',a:13.1,s25:4.7,g25:2.5,s26:3.6,g26:25.4,mv:0.45,m8:0.37,m8g:14.6,net:0.7,f:25.0,fee:0.9,ppd:11.4,sig:'b'},
+  '더블에이트':{d:'더블에이트',a:13.0,s25:5.7,g25:-10.2,s26:3.4,g26:-5.7,mv:0.43,m8:0.20,m8g:-26.5,net:-0.2,f:26.0,fee:0.9,ppd:10.9,sig:'r'},
+  '푸마':{d:'푸마 팩토리',a:49.1,s25:2.8,s26:3.4,g26:133.1,mv:0.42,m8:0.39,m8g:7.0,net:1.9,f:18.0,fee:0.6,ppd:2.8,sig:'b',nt:'49평·성장 견조하나 일평당 2.8만'},
+  '아레나':{d:'아레나',a:14.0,s25:4.0,g25:-4.4,s26:3.1,g26:8.5,mv:0.39,m8:0.38,m8g:-19.8,net:0.2,f:23.0,fee:0.7,ppd:9.1,sig:'r'},
+  'NBA':{d:'NBA',a:13.6,s25:4.3,g25:0.5,s26:3.1,g26:14.5,mv:0.38,m8:0.24,m8g:5.6,net:0.4,f:21.0,fee:0.7,ppd:9.3,sig:'b'},
+  '제인코트':{d:'제인코트 & 티막',a:15.0,s25:3.3,g25:-17.3,s26:3.0,g26:25.0,mv:0.38,m8:0.43,m8g:7.4,net:0.6,f:27.9,fee:0.8,ppd:8.4,sig:'b'},
+  'JEEP':{d:'JEEP',a:10.2,s25:3.8,g25:21.9,s26:2.6,g26:4.9,mv:0.32,m8:0.31,m8g:50.8,net:0.1,f:19.0,fee:0.5,ppd:10.5,sig:'b'},
+  '리바이스':{d:'리바이스',a:10.7,s25:4.1,g25:-12.8,s26:2.4,g26:-7.6,mv:0.29,m8:0.12,m8g:-50.0,net:-0.2,f:18.0,fee:0.4,ppd:9.1,sig:'r'},
+  '라이프워크':{d:'라이프워크',a:21.2,s25:4.2,g25:-3.1,s26:2.2,g26:-18.9,mv:0.27,m8:0.20,m8g:-30.8,net:-0.5,f:19.0,fee:0.4,ppd:4.2,sig:'r'},
+  '그루브라임':{d:'그루브라임플레이',a:24.4,s25:5.1,g25:-13.0,s26:3.1,g26:-5.6,mv:0.39,m8:0.33,m8g:-23.4,net:-0.2,f:24.8,fee:0.8,ppd:5.2,sig:'r'},
+  '슈펜':{d:'슈펜',a:61.4,s25:3.5,g25:-26.9,s26:1.9,g26:-30.3,mv:0.24,m8:0.17,m8g:-30.4,net:-0.8,f:18.8,fee:0.4,ppd:1.3,sig:'r',nt:'61평 대면적·일평당 1.3만 최저'},
+  '예일':{d:'예일',a:11.8,s26:0.3,g26:null,mv:0.13,m8:0.13,m8g:null,net:null,f:17.9,fee:0.0,ppd:4.0,sig:'a',nt:'신규'},
+  '스파오':{d:'스파오 (캐주얼)',a:103.7,s25:19.7,g25:-12.8,s26:12.5,g26:-12.9,mv:1.56,m8:1.30,m8g:-22.7,net:-1.8,f:14.8,fee:1.9,ppd:5.0,sig:'r',nt:'104평 대형·8월 -22.7%·순증 -1.8억'},
+  '게스메가샵':{d:'게스 (GUESS) 진',a:35.8,s25:12.3,g25:-23.5,s26:6.8,g26:-15.7,mv:0.85,m8:0.52,m8g:-35.7,net:-1.3,f:15.0,fee:1.0,ppd:7.8,sig:'r',nt:'8월 -35.7%·순증 -1.3억'},
+  '알레스카':{d:'알래스카',a:13.0,s25:6.3,g25:123.0,s26:5.1,g26:18.3,mv:0.64,m8:0.63,m8g:37.1,net:0.8,f:22.0,fee:1.1,ppd:16.2,sig:'b',nt:'8월 +37.1% 강세'},
+  'NC베이직':{d:'NC 베이직',a:21.3,kind:'ops',nt:'직영 신규'},
+ },
+ diag:{now:[
+  '<b>스노우피크·프로젝트M이 스포츠·스트리트 성장 견인</b> — <span class=bk>스노우피크 8월 +81%·순증 +2.6억</span>.',
+  '<span class=rk>대면적 저효율 심각</span> — 슈펜(61평·일평당 1.3만)·뉴발란스 상설(95평·1.8만)·바인드(57.6평·3.2만)·푸마(49평·2.8만).',
+  '<span class=rk>직영 대형이 층 실적 압박</span> — 스파오(104평·8월 -22.7%·순증 -1.8억)·게스 진(8월 -35.7%·순증 -1.3억)·슈마커(순증 -1.2억). 3개 합산 순증 -4.3억.',
+  '<span class=bk>알래스카 8월 +37.1%</span>(25년 +123% 이어)·스노우피크가 성장 축. 지오다노·MLB·리바이스·라이프워크는 8월 두 자리 역신장.',
+ ],fix:[
+  '<b>스파오·게스 진 면적·MD 재검토</b> — 104평·36평 대형인데 두 자리 역신장, 순증 -3.1억. 성장 브랜드(알래스카·스노우피크)로 면적 전환.',
+  '<b>대면적 저효율(슈펜·뉴발란스 상설·바인드·푸마)</b> 일평당 1.3~3.2만 — 면적 재산정.',
+  'ABC마트 임대 조건 점검 (122평, 8월 -5.5%).',
+  '신규(위라이크·예일·NC베이직) 3개월 재평가.',
+ ]}
+},
+
+5:{name:'5층',theme:'스포츠 / 아웃도어 / 신사',
+ zones:[
+  {t:'아웃도어',keys:['네파','디스커버리','밀레','노스페이스','블랙야크','케이투','아이더','컬럼비아','레드페이스','노르디스크']},
+  {t:'신사',keys:['지오지아','레노마옴므','바쏘옴므','레노마셔츠','에디션','예작','딕스셔츠','파크랜드','STCO','크로커다일']},
+  {t:'스포츠',keys:['스케쳐스','데상트','휠라','르꼬끄','AK골프','올젠','로가디스','PAT','슈페리어','팬텀','인디안','와이드앵글','JDX','루이까스텔','핑','젝시믹스','쌤소나이트','내셔널지오']},
+ ],
+ map:{vb:[1720,1222], shellPath:'M150 74 H1694 V1194 H820 Q150 1194 150 820 Z', boh:[392,80,1000,148], void:[756,456,244,300],
+  labels:[['아웃도어',156,236,0],['신사·스포츠',1008,236,0]],
+  tiles:[
+   ['디스커버리',156,250,192,124],['데상트',156,382,192,124],['노스페이스',156,514,192,124],['블랙야크',156,646,192,124],['케이투',156,778,192,124],['아이더',156,910,192,124],['컬럼비아',156,1042,192,124],
+   ['내셔널지오',356,250,192,124],['밀레',356,382,192,124],['네파',356,514,192,124],['노르디스크',356,646,192,124],['휠라',356,778,192,124],['르꼬끄',356,910,192,124],['젝시믹스',356,1042,192,124],
+   ['스케쳐스',556,250,192,124],['딕스셔츠',556,382,192,124],['쌤소나이트',556,514,192,124],['레노마옴므',556,646,192,124],['레노마셔츠',556,778,192,124],['예작',556,910,192,124],
+   ['지오지아',1008,250,192,124],['바쏘옴므',1008,382,192,124],['올젠',1008,514,192,124],['크로커다일',1008,646,192,124],['루이까스텔',1008,778,192,124],['JDX',1008,910,192,124],['핑',1008,1042,192,124],
+   ['인디안',1208,250,192,124],['PAT',1208,382,192,124],['로가디스',1208,514,192,124],['에디션',1208,646,192,124],['슈페리어',1208,778,192,124],['팬텀',1208,910,192,124],['파크랜드',1208,1042,192,124],
+   ['STCO',1408,250,286,124],['와이드앵글',1408,382,286,124],['레드페이스',1408,514,286,124],['AK골프',1408,646,286,388]
+  ]},
+ b:{
+  '스케쳐스':{d:'스케쳐스',a:28.8,s25:16.7,g25:7.5,s26:12.2,g26:5.1,mv:1.53,m8:1.04,m8g:20.8,net:0.6,f:20.0,fee:2.4,ppd:17.4,sig:'b',nt:'층 매출 1위·8월 +20.8%'},
+  '네파':{d:'네파',a:16.4,s25:13.9,g25:7.6,s26:8.6,g26:27.4,mv:1.07,m8:0.52,m8g:-28.3,net:1.8,f:23.0,fee:2.0,ppd:21.6,sig:'r',nt:'누계 +27%지만 8월 -28%'},
+  '디스커버리':{d:'디스커버리',a:58.7,s25:16.2,g25:2.3,s26:7.5,g26:-15.7,mv:0.93,m8:0.63,m8g:-12.6,net:-1.4,f:15.0,fee:1.1,ppd:5.2,sig:'r',nt:'58.7평 대면적·순증 -1.4억'},
+  '밀레':{d:'밀레',a:16.1,s25:13.3,g25:20.0,s26:7.1,g26:0.6,mv:0.89,m8:0.49,m8g:-0.2,net:0.0,f:22.0,fee:1.6,ppd:18.2,sig:'a'},
+  'AK골프':{d:'AK골프 (위탁)',a:null,s25:11.3,g25:-17.8,s26:6.0,g26:-19.0,mv:0.75,m8:1.13,m8g:39.9,net:-1.4,f:100,fee:6.0,ppd:null,sig:'a',nt:'위탁 수수료 100%·순증 -1.4억'},
+  '지오지아':{d:'지오지아',a:16.3,s25:8.3,g25:-7.2,s26:5.5,g26:4.7,mv:0.69,m8:0.65,m8g:-7.0,net:0.2,f:22.0,fee:1.2,ppd:14.0,sig:'a'},
+  '노스페이스':{d:'노스페이스',a:29.3,s25:10.9,g25:20.0,s26:5.5,g26:13.1,mv:0.68,m8:0.37,m8g:9.5,net:0.6,f:11.0,fee:0.6,ppd:7.7,sig:'b'},
+  '데상트':{d:'데상트',a:29.2,s25:6.4,g25:-1.5,s26:5.2,g26:48.9,mv:0.65,m8:0.40,m8g:29.0,net:1.7,f:16.0,fee:0.8,ppd:7.4,sig:'b',nt:'8월 +29%·순증 +1.7억'},
+  '블랙야크':{d:'블랙야크',a:29.0,s25:6.1,g25:-10.3,s26:5.0,g26:103.6,mv:0.62,m8:0.34,m8g:122.9,net:2.5,f:21.0,fee:1.0,ppd:7.1,sig:'b',nt:'층 최고 성장 (+122.9%)·순증 +2.5억'},
+  '케이투':{d:'K2',a:21.1,s25:8.3,g25:4.1,s26:5.0,g26:23.6,mv:0.62,m8:0.22,m8g:-24.3,net:0.9,f:21.0,fee:1.0,ppd:9.7,sig:'r',nt:'누계 +24%지만 8월 -24%'},
+  '올젠':{d:'올젠',a:12.1,s25:6.6,g25:8.3,s26:4.8,g26:11.6,mv:0.61,m8:0.27,m8g:45.3,net:0.5,f:23.0,fee:1.1,ppd:16.5,sig:'b'},
+  '크로커다일':{d:'크로커다일',a:12.2,s25:6.7,g25:-2.9,s26:4.1,g26:-0.3,mv:0.51,m8:0.33,m8g:-35.2,net:0.0,f:24.7,fee:1.0,ppd:13.8,sig:'r'},
+  '아이더':{d:'아이더',a:28.0,s25:5.8,g25:-12.6,s26:3.6,g26:31.2,mv:0.45,m8:0.34,m8g:-2.3,net:0.9,f:22.0,fee:0.8,ppd:5.3,sig:'a'},
+  '레노마옴므':{d:'레노마옴므',a:12.4,s25:5.5,g25:11.5,s26:3.5,g26:4.8,mv:0.44,m8:0.28,m8g:0.1,net:0.2,f:22.0,fee:0.8,ppd:11.6,sig:'a'},
+  '로가디스':{d:'로가디스',a:23.3,s25:4.9,g25:-0.4,s26:3.4,g26:7.8,mv:0.42,m8:0.39,m8g:47.4,net:0.2,f:22.0,fee:0.7,ppd:5.9,sig:'b'},
+  'PAT':{d:'PAT',a:12.5,s25:5.4,g25:-8.7,s26:3.3,g26:-0.6,mv:0.42,m8:0.16,m8g:-7.4,net:0.0,f:21.8,fee:0.7,ppd:11.0,sig:'r'},
+  '슈페리어':{d:'슈페리어',a:13.7,s25:4.3,g25:-5.4,s26:3.3,g26:25.2,mv:0.41,m8:0.27,m8g:12.0,net:0.7,f:24.9,fee:0.8,ppd:9.8,sig:'b'},
+  '바쏘옴므':{d:'바쏘옴므',a:16.3,s25:4.9,g25:-26.7,s26:3.1,g26:3.9,mv:0.38,m8:0.22,m8g:-28.0,net:0.1,f:23.9,fee:0.7,ppd:7.8,sig:'r'},
+  '컬럼비아':{d:'컬럼비아',a:21.4,s25:6.3,g25:-17.7,s26:3.0,g26:16.9,mv:0.38,m8:0.11,m8g:59.1,net:0.4,f:13.7,fee:0.4,ppd:5.9,sig:'b'},
+  '레노마셔츠':{d:'레노마 (셔츠)',a:6.2,s25:4.6,g25:-8.2,s26:3.0,g26:1.2,mv:0.38,m8:0.35,m8g:14.8,net:0.0,f:21.8,fee:0.7,ppd:20.1,sig:'b'},
+  '팬텀':{d:'팬텀',a:12.2,s25:4.0,g25:-15.3,s26:2.7,g26:9.6,mv:0.33,m8:0.26,m8g:29.7,net:0.2,f:24.0,fee:0.6,ppd:9.0,sig:'b'},
+  '인디안':{d:'인디안',a:12.5,s25:3.9,g25:-14.1,s26:2.5,g26:10.2,mv:0.32,m8:0.18,m8g:21.9,net:0.2,f:24.0,fee:0.6,ppd:8.4,sig:'b'},
+  '와이드앵글':{d:'와이드앵글',a:12.4,s25:3.9,g25:-17.1,s26:2.5,g26:6.7,mv:0.31,m8:0.20,m8g:14.8,net:0.2,f:15.0,fee:0.4,ppd:8.3,sig:'b'},
+  '레드페이스':{d:'레드페이스',a:8.8,s25:3.5,g25:-24.1,s26:2.5,g26:10.9,mv:0.31,m8:0.22,m8g:20.4,net:0.2,f:27.9,fee:0.7,ppd:11.6,sig:'b'},
+  'JDX':{d:'JDX',a:11.4,s25:3.6,g25:-18.1,s26:2.5,g26:16.3,mv:0.31,m8:0.21,m8g:24.2,net:0.3,f:22.9,fee:0.6,ppd:8.9,sig:'b'},
+  '휠라':{d:'휠라',a:20.0,s25:4.2,g25:-15.9,s26:2.4,g26:-15.2,mv:0.30,m8:0.36,m8g:28.7,net:-0.4,f:16.0,fee:0.4,ppd:4.9,sig:'a'},
+  '루이까스텔':{d:'루이까스텔',a:11.4,s25:6.7,g25:-1.4,s26:2.3,g26:-47.8,mv:0.28,m8:0.22,m8g:56.1,net:-2.1,f:19.0,fee:0.4,ppd:8.2,sig:'a',nt:'순증 -2.1억'},
+  '에디션':{d:'에디션',a:12.5,s25:3.9,g25:-51.2,s26:2.1,g26:-17.0,mv:0.27,m8:0.18,m8g:-35.1,net:-0.4,f:23.0,fee:0.5,ppd:7.1,sig:'r'},
+  '노르디스크':{d:'노르디스크',a:20.5,s26:2.0,g26:null,mv:0.25,m8:0.10,m8g:null,net:null,f:19.0,fee:0.4,ppd:4.0,sig:'a',nt:'신규'},
+  '예작':{d:'예작',a:6.1,s25:2.4,g25:-4.9,s26:1.9,g26:21.6,mv:0.24,m8:0.21,m8g:27.0,net:0.3,f:24.0,fee:0.5,ppd:13.1,sig:'b'},
+  '파크랜드':{d:'파크랜드 (팝)',a:12.5,s26:1.6,g26:null,mv:0.20,m8:0.10,m8g:null,net:null,f:25.0,fee:0.4,ppd:5.3,sig:'a',nt:'신규'},
+  '르꼬끄':{d:'르꼬끄스포르티브',a:20.8,s25:2.9,g25:-36.7,s26:1.6,g26:-21.4,mv:0.19,m8:0.12,m8g:-32.2,net:-0.4,f:16.0,fee:0.3,ppd:3.1,sig:'r'},
+  '쌤소나이트':{d:'쌤소나이트 레드',a:9.8,s25:1.8,g25:-19.5,s26:1.2,g26:-2.9,mv:0.14,m8:0.12,m8g:-25.4,net:0.0,f:23.8,fee:0.3,ppd:4.8,sig:'r'},
+  '젝시믹스':{d:'젝시믹스',a:20.6,s25:2.3,g25:-23.5,s26:1.1,g26:-31.9,mv:0.14,m8:0.12,m8g:-29.8,net:-0.5,f:18.0,fee:0.2,ppd:2.2,sig:'r',nt:'20.6평·일평당 2.2만'},
+  'STCO':{d:'STCO',a:24.3,s26:1.0,g26:null,mv:0.17,m8:0.20,m8g:null,net:null,f:25.0,fee:0.3,ppd:2.5,sig:'a',nt:'신규·대면적'},
+  '딕스셔츠':{d:'닥스 (셔츠/타이)',a:6.4,s25:6.9,g25:4.8,s26:4.1,g26:-7.9,mv:0.51,m8:0.41,m8g:-15.7,net:-0.3,f:18.9,fee:0.8,ppd:26.1,sig:'r'},
+  '내셔널지오':{d:'내셔널지오그래픽',a:32.5,s26:0.4,g26:null,mv:0.21,m8:0.33,m8g:null,net:null,f:13.9,fee:0.1,ppd:null,sig:'a',nt:'신규·대면적'},
+  '핑':{d:'PING (핑)',a:11.8,s25:3.8,g25:-11.9,s26:2.8,g26:20.9,mv:0.35,m8:0.26,m8g:3.2,net:0.5,f:18.0,fee:0.5,ppd:9.8,sig:'b'},
+ },
+ diag:{now:[
+  '<b>아웃도어 성장주 뚜렷</b> — <span class=bk>블랙야크 +122.9%·데상트 +29%</span> 8월 순증 각 +2.5·+1.7억. 스케쳐스가 층 매출 1위.',
+  '<span class=rk>8월 반락 브랜드</span> — 네파(-28%, 누계 +27%)·K2(-24%, 누계 +24%)·크로커다일(-35%). 누계 호조가 8월에 꺾임.',
+  '<span class=rk>대면적 저효율</span> — 디스커버리(58.7평·순증 -1.4억)·르꼬끄(20.8평·일평당 3.1만)·젝시믹스(20.6평·2.2만).',
+  'AK골프 위탁(수수료 100%) 8월 매출 1.13억이나 순증 -1.4억 — 위탁 조건 재검토 대상.',
+ ],fix:[
+  '<b>블랙야크·데상트 면적 확장</b>, 디스커버리·르꼬끄·젝시믹스 축소로 재배분.',
+  '<span class=rk>네파·K2</span> 8월 반락 원인 진단 — 재고·행사 타이밍 점검, 9월 회복 확인.',
+  'AK골프 위탁 계약 조건 재협상 (100% 수수료 대비 순손실).',
+  '남성 정장존(딕스셔츠 8월 -15.7%) VMD 개선 — 셔츠·타이 편집 강화.',
+ ]}
+},
+
+6:{name:'6층',theme:'아동',
+ zones:[
+  {t:'아동',keys:['스파오키즈','에스마켓키즈','뉴발란스키즈','탑텐키즈','소이','폴햄키즈','오프라벨','플레이키즈','MLB키즈','아가방플렉스','블랙야크키즈','에꼴리에','휠라키즈6','내셔널지오키즈','수아팜','모이몰른','아이러브제이','해피랜드','NBA키즈','페리미츠','리틀킹','베네통키즈','마크곤잘레스','오즈키즈','리바이스키즈','슈펜키즈','푸마키즈']},
+ ],
+ map:{vb:[1720,1096], shellPath:'M150 74 H1694 V1068 H820 Q150 1068 150 720 Z', boh:[392,80,1000,148], void:[756,456,244,300],
+  labels:[['키즈 상위',156,236,0],['유아·소형',1008,236,0]],
+  tiles:[
+   ['아가방플렉스',156,250,192,124],['뉴발란스키즈',156,382,192,124],['스파오키즈',156,514,192,124],['아이러브제이',156,646,192,124],['리틀킹',156,778,192,124],['베네통키즈',156,910,192,124],
+   ['해피랜드',356,250,192,124],['수아팜',356,382,192,124],['에스마켓키즈',356,514,192,124],['플레이키즈',356,646,192,124],['블랙야크키즈',356,778,192,124],['슈펜키즈',356,910,192,124],
+   ['탑텐키즈',556,250,192,124],['페리미츠',556,382,192,124],['리바이스키즈',556,514,192,124],['푸마키즈',556,646,192,124],['모이몰른',556,778,192,124],['오즈키즈',556,910,192,124],
+   ['NBA키즈',1008,250,192,124],['소이',1008,382,192,124],['마크곤잘레스',1008,514,192,124],['에꼴리에',1008,646,192,124],['폴햄키즈',1008,778,192,124],['MLB키즈',1008,910,192,124],
+   ['내셔널지오키즈',1208,250,192,124],['휠라키즈6',1208,382,192,124],
+   ['창고지원',1408,250,286,380],['짐보리',1408,646,286,124],['오프라벨',1408,778,286,124]
+  ]},
+ b:{
+  '스파오키즈':{d:'스파오키즈',a:34.3,s25:7.4,g25:-15.2,s26:4.9,g26:14.3,mv:0.62,m8:0.16,m8g:-44.2,net:0.6,f:17.0,fee:0.8,ppd:5.9,sig:'r',nt:'34평 대면적·8월 -44%'},
+  '에스마켓키즈':{d:'S마켓키즈',a:17.5,s25:4.5,g25:-7.9,s26:4.0,g26:36.8,mv:0.51,m8:0.59,m8g:214,net:1.1,f:13.9,fee:0.6,ppd:9.5,sig:'b',nt:'8월 +214%'},
+  '뉴발란스키즈':{d:'뉴발란스키즈',a:31.1,s25:6.5,g25:1.4,s26:4.0,g26:-1.2,mv:0.50,m8:0.20,m8g:-24.3,net:-0.1,f:12.0,fee:0.5,ppd:5.3,sig:'r',nt:'31평·8월 -24%'},
+  '탑텐키즈':{d:'탑텐키즈',a:18.6,s25:5.4,g25:1.3,s26:3.5,g26:11.5,mv:0.43,m8:0.21,m8g:62.3,net:0.4,f:18.9,fee:0.7,ppd:7.7,sig:'b'},
+  '소이':{d:'소이',a:8.1,s25:6.0,g25:-4.8,s26:3.4,g26:0.9,mv:0.42,m8:0.17,m8g:-0.1,net:0.0,f:28.5,fee:1.0,ppd:17.1,sig:'a'},
+  '폴햄키즈':{d:'폴햄키즈',a:18.2,s25:5.2,g25:-16.1,s26:3.3,g26:-5.6,mv:0.41,m8:0.19,m8g:27.6,net:-0.2,f:23.8,fee:0.8,ppd:7.5,sig:'a'},
+  '오프라벨':{d:'오프라벨',a:58.0,s25:5.0,s26:3.3,g26:15.4,mv:0.41,m8:0.45,m8g:66.5,net:0.4,f:10.9,fee:0.4,ppd:2.3,sig:'b',nt:'58평 대면적·일평당 2.3만'},
+  '플레이키즈':{d:'플레이키즈프로',a:13.8,s25:3.5,g25:26.0,s26:3.0,g26:63.8,mv:0.38,m8:0.17,m8g:14.8,net:1.2,f:20.0,fee:0.6,ppd:9.0,sig:'b'},
+  'MLB키즈':{d:'MLB키즈',a:13.5,s25:5.1,g25:-9.8,s26:3.0,g26:4.0,mv:0.38,m8:0.17,m8g:4.9,net:0.1,f:14.7,fee:0.5,ppd:9.3,sig:'b'},
+  '아가방플렉스':{d:'아가방플렉스',a:29.5,s25:4.6,g25:-12.8,s26:3.0,g26:14.9,mv:0.37,m8:0.31,m8g:6.7,net:0.4,f:16.0,fee:0.5,ppd:4.2,sig:'b'},
+  '블랙야크키즈':{d:'블랙야크키즈',a:11.7,s25:3.3,g25:-2.5,s26:2.8,g26:68.7,mv:0.35,m8:0.16,m8g:86.9,net:1.2,f:18.0,fee:0.5,ppd:9.9,sig:'b',nt:'8월 +87%'},
+  '에꼴리에':{d:'에꼴리에',a:9.4,s25:4.4,g25:1.0,s26:2.7,g26:6.4,mv:0.34,m8:0.15,m8g:-15.0,net:0.2,f:29.0,fee:0.8,ppd:11.9,sig:'r'},
+  '휠라키즈6':{d:'휠라키즈',a:11.8,s25:2.9,g25:-8.9,s26:2.5,g26:73.8,mv:0.31,m8:0.17,m8g:33.4,net:1.1,f:15.0,fee:0.4,ppd:8.7,sig:'b'},
+  '내셔널지오키즈':{d:'내셔널지오그래픽키즈',a:22.3,s26:2.4,g26:null,mv:0.30,m8:0.16,m8g:null,net:null,f:15.9,fee:0.4,ppd:4.4,sig:'a',nt:'신규·대면적'},
+  '수아팜':{d:'수아팜',a:4.6,s25:3.5,g25:1.6,s26:2.3,g26:-6.0,mv:0.29,m8:0.22,m8g:-12.6,net:-0.1,f:26.6,fee:0.6,ppd:20.7,sig:'r'},
+  '모이몰른':{d:'모이몰른',a:13.9,s25:3.5,g25:-24.9,s26:2.3,g26:-2.9,mv:0.28,m8:0.22,m8g:25.4,net:-0.1,f:25.5,fee:0.6,ppd:6.7,sig:'a'},
+  '아이러브제이':{d:'아이러브제이',a:16.3,s25:3.5,g25:-24.0,s26:2.0,g26:-11.6,mv:0.25,m8:0.13,m8g:-7.5,net:-0.3,f:19.0,fee:0.4,ppd:5.0,sig:'r'},
+  '해피랜드':{d:'해피랜드하우스',a:19.7,s26:1.8,g26:null,mv:0.22,m8:0.18,m8g:null,net:null,f:21.0,fee:0.4,ppd:3.7,sig:'a',nt:'신규·대면적'},
+  'NBA키즈':{d:'NBA키즈',a:8.9,s25:3.6,g25:6.6,s26:1.7,g26:-17.8,mv:0.21,m8:0.13,m8g:3.7,net:-0.4,f:23.0,fee:0.4,ppd:7.8,sig:'a'},
+  '페리미츠':{d:'페리미츠',a:9.3,s25:2.3,g25:11.1,s26:1.7,g26:14.6,mv:0.21,m8:0.10,m8g:58.8,net:0.2,f:28.4,fee:0.5,ppd:7.3,sig:'b'},
+  '리틀킹':{d:'리틀킹',a:9.7,s25:2.4,g25:-6.3,s26:1.5,g26:2.6,mv:0.19,m8:0.14,m8g:4.7,net:0.0,f:23.0,fee:0.4,ppd:6.5,sig:'b'},
+  '베네통키즈':{d:'베네통키즈',a:8.7,s25:2.6,g25:-4.4,s26:1.5,g26:-0.9,mv:0.19,m8:0.08,m8g:-22.7,net:0.0,f:15.0,fee:0.2,ppd:7.0,sig:'r'},
+  '마크곤잘레스':{d:'마크곤잘레스키즈',a:9.3,s26:1.2,g26:null,mv:0.16,m8:0.09,m8g:null,net:null,f:19.0,fee:0.2,ppd:5.5,sig:'a',nt:'신규'},
+  '오즈키즈':{d:'오즈키즈',a:9.3,s25:1.9,s26:1.1,g26:2.1,mv:0.13,m8:0.07,m8g:-28.3,net:0.0,f:20.0,fee:0.2,ppd:4.7,sig:'r'},
+  '리바이스키즈':{d:'리바이스키즈',a:9.0,s25:1.4,g25:-24.6,s26:0.8,g26:-10.4,mv:0.10,m8:0.05,m8g:-9.5,net:-0.1,f:19.9,fee:0.2,ppd:3.7,sig:'r'},
+  '슈펜키즈':{d:'슈펜키즈',a:12.8,s25:1.6,g25:-39.5,s26:0.7,g26:-39.1,mv:0.09,m8:0.05,m8g:-53.5,net:-0.5,f:17.0,fee:0.1,ppd:2.4,sig:'r'},
+  '푸마키즈':{d:'푸마키즈',a:12.7,s26:0.5,g26:null,mv:0.07,m8:0.02,m8g:-75.7,net:null,f:19.0,fee:0.1,ppd:1.8,sig:'r',nt:'신규'},
+  '짐보리':{d:'짐보리',a:62.4,kind:'ops',nt:'놀이시설·미집계'},
+  '창고지원':{d:'창고 (지원시설)',a:136.3,kind:'ops',nt:'미집계'},
+ },
+ diag:{now:[
+  '<b>S마켓키즈·블랙야크키즈가 성장 주도</b> — <span class=bk>S마켓키즈 8월 +214%</span>, 블랙야크키즈 +87%.',
+  '<span class=rk>대형 키즈 SPA 8월 부진</span> — 스파오키즈(34평·-44%)·뉴발란스키즈(31평·-24%). 면적 대비 실적 취약.',
+  '<span class=rk>슈펜키즈·푸마키즈·리바이스키즈·오즈키즈</span> 8월 두 자리 역신장, 일평당 1.8~4.7만.',
+  '오프라벨(58평)·짐보리(62평) 대면적이 층 면적의 큰 비중 — 오프라벨 일평당 2.3만.',
+ ],fix:[
+  '<b>스파오키즈·뉴발란스키즈 면적 축소</b> — S마켓키즈·블랙야크키즈·탑텐키즈 확장.',
+  '<span class=rk>슈펜키즈·푸마키즈·리바이스키즈</span> 통합 또는 철수 검토.',
+  '오프라벨 58평 재산정 — 일평당 하위, 성장 키즈로 전환.',
+  '신규(해피랜드하우스·마크곤잘레스·내셔널지오그래픽키즈) 3개월 재평가.',
+ ]}
+},
+};
+
+/* ============ 7~10층: 도면만 (평수 + 구분) ============ */
+const P = {
+7:{name:'7층',theme:'모던하우스 / NC픽스',
+ note:'7층은 이랜드 직영 대형 매장(모던하우스·NC픽스) 위주로, 현황판 매출 집계 대상이 아닙니다. 평수·구분만 표시합니다.',
+ boxes:[
+  {n:'모던하우스',py:1175.5,k:'anchor'},
+  {n:'NC픽스',py:345.2,k:'anchor'},
+  {n:'STOCK',py:19.8,k:'ops'},
+  {n:'행사장 A',py:8.1,k:'ops'},
+  {n:'행사장 B',py:8.1,k:'ops'},
+  {n:'조명',py:4.8,k:'anchor'},
+ ],
+ plan:{vb:[1720,1200], shellPath:'M150 74 H1694 V1172 H820 Q150 1172 150 800 Z', boh:[392,80,1000,148],
+  labels:[['모던하우스 (직영)',900,236,0]],
+  tiles:[
+   ['모던하우스',500,250,1194,900],
+   ['NC픽스',156,720,320,430],
+   ['행사장 A',156,250,158,210],['행사장 B',324,250,156,210],
+   ['조명',156,478,158,210],['STOCK',324,478,156,210]
+  ]}
+},
+8:{name:'8층',theme:'F&B (다이소 · YES24 · 식음)',
+ note:'8층은 앵커(다이소·YES24)와 식음·서비스 매장 위주로, 현황판 매출 집계 대상이 아닙니다. 평수·구분만 표시합니다.',
+ boxes:[
+  {n:'다이소',py:463.1,k:'anchor'},
+  {n:'YES24',py:129.7,k:'anchor'},
+  {n:'두끼',py:44.9,k:'fnb'},
+  {n:'북창동순두부',py:39.5,k:'fnb'},
+  {n:'사월의보리밥과 쭈꾸미',py:38.8,k:'fnb'},
+  {n:'다이소 창고',py:37.3,k:'ops'},
+  {n:'후쿠오카 함박',py:37.0,k:'fnb'},
+  {n:'박승철 헤어스튜디오',py:35.7,k:'lease'},
+  {n:'1986 필라테스',py:29.5,k:'lease'},
+  {n:'중화가정',py:28.2,k:'fnb'},
+  {n:'스킨포유',py:27.0,k:'lease'},
+  {n:'1인샤브 (샤브보트)',py:26.3,k:'fnb'},
+  {n:'금성침대',py:24.8,k:'lease'},
+  {n:'블럭버스',py:21.2,k:'fnb'},
+  {n:'유이스시',py:12.0,k:'fnb'},
+  {n:'철판다구오',py:12.0,k:'fnb'},
+  {n:'압구정리',py:12.1,k:'fnb'},
+  {n:'북촌손만두',py:12.1,k:'fnb'},
+  {n:'아메리칸 트레일러',py:8.9,k:'fnb'},
+  {n:'공용테이블',py:8.5,k:'ops'},
+  {n:'헤지스홈',py:8.1,k:'ops'},
+  {n:'알리페즈',py:8.1,k:'ops'},
+  {n:'하나투어',py:5.3,k:'lease'},
+ ],
+ plan:{vb:[1720,1200], shellPath:'M150 74 H1694 V1172 H820 Q150 1172 150 800 Z', boh:[392,80,1000,148],
+  labels:[['식음 (F&B)',156,236,0],['다이소 (직영)',1300,236,0]],
+  tiles:[
+   ['다이소',1000,250,694,700],['YES24',156,960,600,220],['다이소 창고',770,960,220,220],
+   ['두끼',156,250,228,110],['사월의보리밥과 쭈꾸미',156,368,228,110],['철판다구오',156,486,228,110],['유이스시',156,604,228,110],['공용테이블',156,722,228,110],['1인샤브 (샤브보트)',156,840,228,110],
+   ['북창동순두부',396,250,228,110],['박승철 헤어스튜디오',396,368,228,110],['금성침대',396,486,228,110],['압구정리',396,604,228,110],['북촌손만두',396,722,228,110],['알리페즈',396,840,228,110],
+   ['중화가정',636,250,228,110],['스킨포유',636,368,228,110],['1986 필라테스',636,486,228,110],['하나투어',636,604,228,110],['아메리칸 트레일러',636,722,228,110],['헤지스홈',636,840,228,110],
+   ['블럭버스',876,250,110,110],['후쿠오카 함박',876,368,110,228]
+  ]}
+},
+9:{name:'9층',theme:'F&B (애슐리 · 뷔페 · 다이닝)',
+ note:'9층은 식음(뷔페·레스토랑)과 라운지 위주로, 현황판 매출 집계 대상이 아닙니다. 평수·구분만 표시합니다. (도면 26.02.13 기준)',
+ boxes:[
+  {n:'YES24',py:287.9,k:'anchor'},
+  {n:'애슐리',py:228.5,k:'fnb'},
+  {n:'로운',py:147.8,k:'fnb'},
+  {n:'피자몰 뷔페',py:115.3,k:'fnb'},
+  {n:'VIP라운지',py:66.5,k:'ops'},
+  {n:'반궁',py:63.8,k:'fnb'},
+  {n:'리미니',py:46.2,k:'fnb'},
+  {n:'테루',py:40.2,k:'fnb'},
+  {n:'용호낙지',py:21.2,k:'fnb'},
+  {n:'셀레임 (카페)',py:21.2,k:'fnb'},
+  {n:'인생네컷',py:11.2,k:'lease'},
+  {n:'더카페',py:10.2,k:'fnb'},
+  {n:'계단 신설',py:10.3,k:'ops'},
+ ],
+ plan:{vb:[1720,1240], shellPath:'M150 74 H1694 V1212 H820 Q150 1212 150 800 Z', boh:[392,80,1000,148],
+  labels:[['다이닝 · 라운지',156,236,0],['우측 다이닝',1360,236,0]],
+  tiles:[
+   ['애슐리',156,250,560,470],['YES24',156,740,560,380],['피자몰 뷔페',740,250,560,280],
+   ['용호낙지',740,552,175,150],['인생네컷',740,714,175,150],['더카페',928,552,175,150],['셀레임 (카페)',740,876,175,150],['계단 신설',928,714,175,150],
+   ['로운',1360,250,334,300],['리미니',1360,566,334,150],['테루',1360,728,334,150],['VIP라운지',1360,890,334,150],['반궁',1360,1052,334,150]
+  ]}
+},
+10:{name:'10층',theme:'옥상',
+ note:'10층은 옥상정원·문화시설·증축(대수선) 구역으로, 현황판 매출 집계 대상이 아닙니다. 평수·구분만 표시합니다.',
+ boxes:[
+  {n:'공실',py:95.9,k:'vacant'},
+  {n:'아티코드',py:56.5,k:'lease'},
+  {n:'옥상 정원',py:null,k:'ops'},
+  {n:'옥상 쿨링타워',py:null,k:'ops'},
+  {n:'창고 (증축)',py:null,k:'ops'},
+  {n:'금회신청부분 (대수선 · 지상 9·10층)',py:null,k:'ops'},
+ ],
+ plan:{vb:[1720,1110], shellPath:'M150 74 H1694 V1082 H820 Q150 1082 150 720 Z', boh:[392,80,1000,120],
+  labels:[['옥상층 · 증축',156,236,0]],
+  tiles:[
+   ['옥상 쿨링타워',156,250,420,520],
+   ['금회신청부분 (대수선 · 지상 9·10층)',640,250,440,220],
+   ['공실',640,490,440,300],
+   ['아티코드',640,810,440,250],
+   ['창고 (증축)',1100,250,270,140],
+   ['옥상 정원',1100,410,594,650]
+  ]}
+}
+};
+
+/* ============ 렌더 ============ */
+const fmt=n=>n==null?'&mdash;':(n>=0?'':'')+n.toFixed(n>=10?0:1);
+const pct=(g,pre)=>g==null?'<span class="g-new">신규</span>':(g>0?'<span class="g-pos">+'+g.toFixed(1)+'%</span>':(g<0?'<span class="g-neg">'+g.toFixed(1)+'%</span>':'<span class="g-flat">0.0%</span>'));
+const SIGC={b:'var(--blue)',a:'var(--amber)',r:'var(--red)',g:'var(--grey)'};
+const SIGSOFT={b:'var(--blue-soft)',a:'var(--amber-soft)',r:'var(--red-soft)',g:'var(--grey-soft)'};
+const SIGINK={b:'var(--blue-ink)',a:'var(--amber-ink)',r:'var(--red-ink)',g:'var(--ink-3)'};
+
+function tileSVG(x,y,w,h,br){
+  const sig=br.kind?'g':(br.sig||'g');
+  const fill=SIGSOFT[sig], stroke=SIGC[sig], ink=(sig==='r'?'var(--red-ink)':'var(--ink)');
+  let s=`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="${sig==='r'?1.8:1.4}"/>`;
+  s+=`<text x="${x+12}" y="${y+19}" class="z-name" font-size="12" ${sig==='r'?'fill="var(--red-ink)"':''}>${br.d}</text>`;
+  if(br.kind){
+    const lbl={fnb:'F&B',lease:'외부 임대',ops:'직영·운영',anchor:'직영 대형'}[br.kind]||'';
+    s+=`<text x="${x+12}" y="${y+37}" class="z-sub" font-size="8.5">${br.a?br.a.toFixed(1)+'평 · ':''}${lbl}${br.nt?' · '+br.nt:''}</text>`;
+  }else{
+    const badge = br.m8g==null?'<tspan class="z-badge" font-size="10" fill="'+SIGINK[sig]+'">신규</tspan>'
+      :'<tspan class="z-badge" font-size="10.5" fill="'+SIGINK[sig]+'">'+(br.m8g>0?'+':'')+br.m8g.toFixed(1)+'%</tspan>';
+    s+=`<text x="${x+12}" y="${y+43}" class="z-aug" font-size="16">${br.m8==null?'&mdash;':br.m8.toFixed(2)+'억'} </text>`;
+    s+=`<text x="${x+12+ (br.m8==null?18:64)}" y="${y+43}" font-size="10">${badge}</text>`;
+    let l3=`누계 ${fmt(br.s26)}억 · ${br.g26==null?'신규':(br.g26>0?'+':'')+(br.g26!=null?br.g26.toFixed(1):'')+'%'} · ${br.a!=null?br.a.toFixed(1)+'평':''}`;
+    s+=`<text x="${x+12}" y="${y+59}" class="z-sub" font-size="8">${l3}</text>`;
+    if(br.nt) s+=`<text x="${x+12}" y="${y+70}" class="z-sub" font-size="7.7" ${sig==='r'?'fill="var(--red-ink)"':''}>${br.nt}</text>`;
+  }
+  s+='</g>';
+  return s;
+}
+
+function shell(m){
+  const P=m.shellPath||'M40 54 H1372 V1180 H360 Q40 1180 40 760 Z';
+  const boh=m.boh||[210,58,940,30];
+  let s=`<path d="${P}" fill="var(--card-2)" stroke="var(--line-2)" stroke-width="1.6"/>`;
+  s+=`<rect x="${boh[0]}" y="${boh[1]}" width="${boh[2]}" height="${boh[3]}" fill="var(--grey-soft)" stroke="var(--line)"/>`;
+  s+=`<text x="${boh[0]+boh[2]/2}" y="${boh[1]+boh[3]-9}" text-anchor="middle" class="z-sub" font-size="10">BOH · 직원휴게실 · 승강기 · 공용창고</text>`;
+  if(m.void){const [x,y,w,h]=m.void;
+    s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="var(--card)" stroke="var(--line-2)" stroke-width="1.3" stroke-dasharray="6 4"/>`;
+    s+=`<path d="M${x+14} ${y+16} h${w-28} M${x+14} ${y+27} h${w-28} M${x+14} ${y+h-27} h${w-28} M${x+14} ${y+h-16} h${w-28}" stroke="var(--line-2)" stroke-width="1"/>`;
+    s+=`<text x="${x+w/2}" y="${y+h/2-3}" text-anchor="middle" class="z-sub" font-size="10">상부 OPEN</text>`;
+    s+=`<text x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" class="z-sub" font-size="8.5">에스컬레이터</text>`;
+  }
+  (m.fixtures||[]).forEach(fx=>{
+    s+=`<rect x="${fx[0]}" y="${fx[1]}" width="${fx[2]}" height="${fx[3]}" rx="3" fill="var(--grey-soft)" stroke="var(--line)" opacity="0.75"/>`;
+    if(fx[4])s+=`<text x="${fx[0]+fx[2]/2}" y="${fx[1]+fx[3]/2+3}" text-anchor="middle" class="z-sub" font-size="8.5">${fx[4]}</text>`;
+  });
+  (m.labels||[]).forEach(l=>{
+    s+=`<text x="${l[1]}" y="${l[2]}" class="zone-tag" ${l[3]?`transform="rotate(${l[3]} ${l[1]} ${l[2]})"`:''}>${l[0]}</text>`;
+  });
+  return s;
+}
+function renderFull(id){
+  const f=F[id]; const b=f.b; const m=f.map||{tiles:[]};
+  const [W,H]=m.vb||[1400,1000];
+  let svg=m.tiles.length?shell(m):'';
+  m.tiles.forEach(([k,x,y,w,h])=>{ const br=b[k]; if(br) svg+=tileSVG(x,y,w,h,br); });
+  const kpi=f.kpi ? f.kpi : buildKpi(f);
+  return `
+  <div class="fhead"><h2>${f.name}</h2><span class="badge">8월 실적</span><span class="ft">${f.theme}</span></div>
+  <section class="kpis">${kpi.map(t=>`<div class="kpi"><div class="k">${t.k}</div><div class="v">${t.v}</div></div>`).join('')}</section>
+  <div class="mapcard">
+    <div class="mapcard-h"><h3>${f.name} 매장 배치도 &mdash; 8월 실적</h3><span class="hint">굵은 숫자 = 8월 매출 / 8월 성장 · 아래 = 26년 누계 · 색 = 8월 성장 신호</span></div>
+    <div class="mapscroll"><svg class="plan" viewBox="0 0 ${W} ${H}" role="img">${svg}</svg></div>
+    <div class="legend">
+      <b><i class="sw-r"></i><span style="color:var(--red-ink);font-weight:700">빨강 · 부진</span> — 8월 -12%↓ / 저효율</b>
+      <b><i class="sw-a"></i>노랑 · 주의 — 8월 -12~+3% · 신규 · 누계 역신장</b>
+      <b><i class="sw-b"></i>파랑 · 양호 — 8월 +3%↑ / 앵커</b>
+      <b><i class="sw-g"></i>회색 — 직영 · 임대 · F&B · 미집계</b>
+    </div>
+  </div>
+  ${tableHTML(f)}
+  <div class="diag">
+    <div class="dcard now"><h4><span class="tag">진단</span>${f.name} 8월 현황</h4><ul>${f.diag.now.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="dcard fix"><h4><span class="tag">제안</span>개선 방향</h4><ul>${f.diag.fix.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  </div>`;
+}
+
+function buildKpi(f){
+  let arr=Object.values(f.b).filter(x=>!x.kind);
+  const cnt=arr.length;
+  const m8sum=arr.reduce((a,x)=>a+(x.m8||0),0);
+  const s26sum=arr.reduce((a,x)=>a+(x.s26||0),0);
+  const red=arr.filter(x=>x.sig==='r').length;
+  const top=arr.slice().sort((a,b)=>(b.m8||0)-(a.m8||0))[0];
+  return [
+    {k:'판매 브랜드',v:cnt+'<small> 개</small>'},
+    {k:'8월 매출',v:m8sum.toFixed(1)+'<small> 억</small>'},
+    {k:'8월 1위',v:'<span class=blue>'+top.d.split(' ')[0]+'</span> <small>'+top.m8.toFixed(2)+'억</small>'},
+    {k:'8월 부진 <span style="color:var(--red)">●</span>',v:'<span class=red>'+red+'</span><small> 개</small>'},
+    {k:'26년 ~8월 누계',v:s26sum.toFixed(0)+'<small> 억</small>'},
+  ];
+}
+
+function tableHTML(f){
+  const rows=[];
+  f.zones.forEach(z=>{
+    rows.push(`<tr class="grp"><td colspan="13">${z.t}</td></tr>`);
+    z.keys.forEach(k=>{
+      const x=f.b[k]; if(!x||x.kind)return;
+      rows.push(`<tr><td><span class="dot d-${x.sig}"></span></td><td class="bn">${x.d}</td>
+        <td class="num">${x.s25!=null?fmt(x.s25)+'억':'&mdash;'}</td><td class="num">${x.g25!=null?pct(x.g25):(x.s25!=null?'<span class=g-flat>&mdash;</span>':'<span class=g-new>신규</span>')}</td>
+        <td class="num">${fmt(x.s26)}억</td><td class="num">${pct(x.g26)}</td>
+        <td class="num">${x.mv!=null?fmt(x.mv)+'억':'&mdash;'}</td>
+        <td class="num aug">${x.m8!=null?x.m8.toFixed(2)+'억':'&mdash;'} <span class="sm">${x.m8g==null?'<span class=g-new>신규</span>':(x.m8g>0?'<span class=g-pos>+'+x.m8g.toFixed(1)+'%</span>':'<span class=g-neg>'+x.m8g.toFixed(1)+'%</span>')}</span></td>
+        <td class="num">${x.net==null?'<span class=g-new>신규</span>':(x.net>0?'<span class=g-pos>+'+x.net.toFixed(1)+'억</span>':(x.net<0?'<span class=g-neg>'+x.net.toFixed(1)+'억</span>':'<span class=g-flat>0.0억</span>'))}</td>
+        <td class="num">${x.f!=null?x.f.toFixed(1)+'%':'&mdash;'}</td><td class="num">${x.fee!=null?fmt(x.fee)+'억':'&mdash;'}</td>
+        <td class="num">${x.a!=null?x.a.toFixed(1):'&mdash;'}</td><td class="num" ${x.sig==='r'?'style="color:var(--red-ink)"':''}>${x.ppd!=null?x.ppd.toFixed(1)+'만':'&mdash;'}</td></tr>`);
+    });
+  });
+  let arr=Object.values(f.b).filter(x=>!x.kind);
+  const S=(g)=>arr.reduce((a,x)=>a+(x[g]||0),0);
+  return `<div class="tblcard"><h3>브랜드별 상세 지표</h3><div class="tblscroll"><table class="detail">
+    <thead><tr><th>신호</th><th>브랜드</th><th>25년 매출</th><th>성장율</th><th>26년 ~8월</th><th>성장율</th><th>월평균</th><th class="hi">8월</th><th>순증액</th><th>수수료율</th><th>수수료액</th><th>전용(평)</th><th>일평당</th></tr></thead>
+    <tbody>${rows.join('')}</tbody>
+    <tfoot><tr><td></td><td>${arr.length}개 판매 브랜드 합계</td><td class="num">${S('s25').toFixed(0)}억</td><td></td><td class="num">${S('s26').toFixed(0)}억</td><td></td><td class="num">${S('mv').toFixed(1)}억</td><td class="num aug">${S('m8').toFixed(1)}억</td><td class="num">${S('net').toFixed(1)}억</td><td></td><td class="num">${S('fee').toFixed(1)}억</td><td class="num">${S('a').toFixed(0)}</td><td></td></tr></tfoot>
+  </table></div>
+  <div style="padding:8px 16px 16px;font-size:10px;color:var(--ink-3);line-height:1.6">· <b>8월</b> = 26년 8월 단월(성장 25년 8월 대비) · <b>26년 ~8월</b> = 1&ndash;8월 누계(성장 25년 동기 대비) · <b>순증액</b> = 26년 누계 &minus; 25년 동기 · <b>수수료액</b> = 누계 &times; 수수료율 · <b>일평당</b> = 누계 &divide; 전용면적 &divide; 243일. 회색(직영·임대·F&B)은 표에서 제외.</div>
+  </div>`;
+}
+
+function renderPlan(id){
+  const p=P[id];
+  const KD={anchor:['직영 대형','anchor'],lease:['외부 임대','lease'],fnb:['F&B','fnb'],ops:['직영·운영','ops'],vacant:['공실','vacant']};
+  const CLR={anchor:'brand',lease:'amber',fnb:'blue',ops:'grey',vacant:'red'};
+  const totalPy=p.boxes.reduce((a,x)=>a+(x.py||0),0);
+  const bs=p.boxes.slice().sort((a,b)=>(b.py||0)-(a.py||0));
+  const byN={}; p.boxes.forEach(b=>byN[b.n]=b);
+  const m=p.plan; const [W,H]=m.vb;
+  let svg=shell(m);
+  m.tiles.forEach(([n,x,y,w,h])=>{
+    const b=byN[n]; if(!b)return;
+    const c=CLR[b.k];
+    svg+=`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="var(--${c}-soft)" stroke="var(--${c})" stroke-width="1.4" ${(b.k==='ops'||b.k==='vacant')?'stroke-dasharray="6 4"':''}/>
+      <text x="${x+13}" y="${y+23}" class="z-name" font-size="${h>180?16:h>90?13:11.5}">${b.n}</text>
+      <text x="${x+13}" y="${y+(h>180?45:h>90?41:38)}" class="z-sub" font-size="9">${b.py!=null?'PY '+b.py.toFixed(1)+' · ':''}${KD[b.k][0]}</text></g>`;
+  });
+  return `
+  <div class="fhead"><h2>${p.name}</h2><span class="badge plan">도면 (평수·구분)</span><span class="ft">${p.theme}</span></div>
+  <section class="kpis">
+    <div class="kpi"><div class="k">구획 수</div><div class="v">${p.boxes.length}<small> 개</small></div></div>
+    <div class="kpi"><div class="k">표기 면적 합</div><div class="v">${totalPy.toFixed(0)}<small> 평</small></div></div>
+    <div class="kpi"><div class="k">최대 구획</div><div class="v">${bs[0].n.split(' ')[0]} <small>${bs[0].py?bs[0].py.toFixed(0)+'평':''}</small></div></div>
+    <div class="kpi"><div class="k">매출 데이터</div><div class="v"><small>현황판 미집계</small></div></div>
+    <div class="kpi"><div class="k">도면 기준</div><div class="v"><small>26.06&ndash;08</small></div></div>
+  </section>
+  <div class="mapcard">
+    <div class="mapcard-h"><h3>${p.name} 매장 배치도</h3><span class="hint">칸 크기 = 평수 비례 · 색 = 구분</span></div>
+    <div class="mapscroll"><svg class="plan" viewBox="0 0 ${W} ${H}" role="img">${svg}</svg></div>
+    <div class="legend">
+      <b><i class="sw-b"></i>직영 대형 (앵커)</b><b><i class="sw-a"></i>외부 임대</b>
+      <b><i style="background:var(--blue)"></i>F&B</b><b><i class="sw-g"></i>직영·운영</b><b><i class="sw-r"></i>공실</b>
+    </div>
+  </div>
+  <div class="tblcard"><h3>구획 목록</h3><div class="tblscroll"><table class="detail" style="min-width:480px">
+    <thead><tr><th>구분</th><th>매장</th><th>평수 (PY)</th></tr></thead>
+    <tbody>${p.boxes.map(b=>`<tr><td><span class="kd ${KD[b.k][1]}">${KD[b.k][0]}</span></td><td class="bn">${b.n}</td><td class="num">${b.py!=null?b.py.toFixed(1):'&mdash;'}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td></td><td>표기 면적 합</td><td class="num">${totalPy.toFixed(1)}</td></tr></tfoot>
+  </table></div>
+  <div class="planlist">${p.note}</div></div>`;
+}
+
+function show(id){
+  document.querySelectorAll('#ftabs button').forEach(b=>b.classList.toggle('on',+b.dataset.f===id));
+  document.getElementById('stage').innerHTML = F[id]?renderFull(id):renderPlan(id);
+  document.getElementById('h-title').textContent = '강서점 '+ (F[id]?F[id].name:P[id].name) + ' 조닝 리포트';
+  document.getElementById('h-sub').innerHTML = F[id]
+    ? '브랜드별 <b>8월 월매출·성장</b>을 매장 배치에 매칭 · 색 = 8월 성장 신호 (누계는 보조)'
+    : '매장 배치도 · 평수와 임대/직영 구분만 표시 (현황판 매출 집계 대상 아님)';
+  try{location.hash='f'+id;}catch(e){}
+}
+const TAB={1:'스포츠/잡화',2:'영캐주얼',3:'여성/화장품/명품',4:'캐주얼/스포츠',5:'스포츠/아웃도어/신사',6:'아동',7:'모던하우스/NC픽스',8:'F&B',9:'F&B',10:'옥상'};
+const tabs=document.getElementById('ftabs');
+for(let i=1;i<=10;i++){
+  const btn=document.createElement('button'); btn.dataset.f=i;
+  btn.innerHTML = i+'층<span class="k">'+TAB[i]+'</span>';
+  btn.onclick=()=>show(i); tabs.appendChild(btn);
+}
+window.addEventListener('hashchange',()=>{
+  const m=(location.hash.match(/^#f(\d+)$/)||[])[1];
+  if(m && (F[+m]||P[+m])) show(+m);
+});
+const start = (location.hash.match(/^#f(\d+)$/)||[])[1];
+show(start?+start:1);
+</script>
+
+</body>
+</html>
